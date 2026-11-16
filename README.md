@@ -1,2 +1,38 @@
-# abyssal-portfolio
-My cinematic AI engineering portfolio, built with Python and Django. Explore the project case studies and the animated Abyssal Observatory.
+# Abyssal Observatory
+
+Dishank Jain’s AI engineering portfolio, built with Python and Django. Browse six project studies, four roles, and an interactive demo of the confidence threshold in SupportPilot.
+
+[Visit the portfolio](https://dishank25.github.io/Dishank25/) · [Open the portfolio case study](https://dishank25.github.io/Dishank25/projects/abyssal-portfolio/) · [GitHub profile](https://github.com/Dishank25)
+
+![Underwater signal room looking out into the abyss](portfolio/static/portfolio/assets/signal-room.webp)
+
+## Run locally
+
+Use Python 3.10 or newer. From the repository directory, create a virtual environment and start the Django development server.
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python manage.py runserver
+```
+
+On Windows PowerShell, activate the environment with `.\.venv\Scripts\Activate.ps1`. Open [localhost:8000](http://127.0.0.1:8000/). The app requires no database setup, API keys or external services.
+
+## How it works
+
+- [Career and project content](portfolio/content.json) supplies both the home page and each individual project page. To add a project, give its entry a unique URL slug in the `id` field, then edit its title, description, paragraphs, tags and source links.
+- [Django views](portfolio/views.py) serve the homepage at `/` and case studies at `/projects/<slug>/`. The [templates](portfolio/templates/portfolio/) reuse each case study’s body in both layouts.
+- [Static assets](portfolio/static/portfolio/) handle the character animation, scroll depth, mobile composition, and the keyboard-operated confidence slider. The motion control remembers a visitor’s preference and starts with a still scene when their system requests reduced motion.
+- [The export command](portfolio/management/commands/export_site.py) renders the same Django views into HTML and copies their assets. GitHub Pages serves this static edition. Relative links work under both a domain root and a repository path.
+
+## Verify and export
+
+```sh
+python manage.py check
+python manage.py test
+python manage.py export_site --output build
+python -m http.server 8001 --directory build
+```
+
+Visit [localhost:8001](http://127.0.0.1:8001/) to inspect the static edition. Deploy the contents of `build/` to a static host. For a subsequent export, use the same output directory. The command recognizes its own previous build and replaces it after every route and asset has been written successfully.

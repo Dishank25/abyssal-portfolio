@@ -1,0 +1,108 @@
+{% extends 'portfolio/base.html' %}
+{% load portfolio_urls %}
+{% block head %}
+  <link rel="preload" href="{% asset_url 'assets/observatory.webp' %}" as="image">
+  <script defer src="{% asset_url 'site.js' %}"></script>
+  <script defer src="{% asset_url 'confidence.js' %}"></script>
+{% endblock %}
+{% block main %}
+<main id="main">
+  <section id="top" class="descent" aria-labelledby="hero-title">
+    <div class="hero">
+      <div class="hero-art" aria-hidden="true">
+        <img src="{% asset_url 'assets/observatory.webp' %}" data-character-motion="{% asset_url 'assets/character-scene.svg' %}" alt="" width="1920" height="711" fetchpriority="high">
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="sunshaft" aria-hidden="true"></div>
+      <div class="particles" aria-hidden="true"></div>
+      <div class="hero-inner shell">
+        <div class="hero-copy">
+          <p class="hero-role"><span></span>{{ site.role }} <span class="slash">/</span> {{ site.location }}</p>
+          <h1 id="hero-title">Dishank <em>Jain.</em></h1>
+          <p class="hero-intro">{{ site.hero.lead }}</p>
+          <a class="action" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <div class="hero-base shell">
+        <span class="scene-caption">{% include 'portfolio/manta.html' %} Abyssal Observatory</span>
+        <button class="motion-button" type="button" data-motion hidden aria-pressed="false">
+          <span class="motion-icon" aria-hidden="true"></span><span data-motion-label>Pause motion</span>
+        </button>
+      </div>
+      <div class="depth-shade" aria-hidden="true"></div>
+    </div>
+  </section>
+  <div id="work" class="work-area">
+    <section class="work shell" aria-labelledby="work-title">
+      <div class="work-intro">
+        <span class="chapter">Project studies</span>
+        <h2 id="work-title">Selected <em>work.</em></h2>
+        <p>I build tools for finding answers in text, records, images, and purchase histories. These projects show how each system reaches a decision.</p>
+        <figure class="room">
+          <img src="{% asset_url 'assets/signal-room.webp' %}" width="1640" height="618" loading="lazy" alt="An illustrated deep-sea signal room overlooking a trail of underwater lamps.">
+          <figcaption>The signal room</figcaption>
+        </figure>
+      </div>
+      <div class="projects">
+        {% for project in site.projects %}
+          <details class="project" id="{{ project.id }}"{% if forloop.first %} open{% endif %}>
+            <summary>
+              <span class="project-label">{{ project.category }}</span>
+              <span class="project-title">{{ project.title }}</span>
+              <span class="disclosure" aria-hidden="true"></span>
+            </summary>
+            {% include 'portfolio/project_body.html' with standalone=False %}
+          </details>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+  <section class="about band" id="about" aria-labelledby="about-title">
+    <div class="shell about-grid">
+      <div><span class="chapter">About me</span><h2 id="about-title">From screens <em>to search.</em></h2></div>
+      <div class="about-body">
+        {% for paragraph in site.about.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+      </div>
+    </div>
+  </section>
+  <section class="experience shell band" id="experience" aria-labelledby="experience-title">
+    <div class="section-head">
+      <span class="chapter">Work history</span><h2 id="experience-title"><em>Experience.</em></h2>
+    </div>
+    <div class="positions">
+      {% for role in site.experience %}
+        <article class="position">
+          <div class="when">{{ role.dates }}</div>
+          <div><h3>{{ role.title }}</h3><div class="company">{{ role.company }}</div><p>{{ role.body }}</p></div>
+        </article>
+      {% endfor %}
+      <div class="education">
+        <h3>Education &amp; training</h3>
+        <ul>
+          {% for item in site.education %}
+            <li><span>{{ item.date }}</span><div>{{ item.title }}<small>{{ item.institution }}</small></div></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="skills band" id="skills" aria-labelledby="skills-title">
+    <div class="shell skills-grid">
+      <div><span class="chapter">Technical skills</span><h2 id="skills-title">My <em>toolkit.</em></h2></div>
+      <div class="skill-list">
+        {% for skill in site.skills %}<article><h3>{{ skill.title }}</h3><p>{{ skill.body }}</p></article>{% endfor %}
+      </div>
+    </div>
+  </section>
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-cover" aria-hidden="true"></div>
+    <div class="shell contact-inner">
+      <span class="chapter">Contact</span><h2 id="contact-title">Get in <em>touch.</em></h2>
+      <p>{{ site.contact.body }}</p>
+      <div class="contact-links">
+        {% for link in site.contact.links %}<a href="{{ link.url }}">{{ link.label }} <span aria-hidden="true">↗</span></a>{% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" role="img" aria-labelledby="title desc">
+  <title id="title">SupportPilot retrieval decision</title>
+  <desc id="desc">Three candidate FAQs are retrieved. The distance to the closest match determines whether the service generates a grounded answer or returns a fixed fallback.</desc>
+  <defs>
+    <radialGradient id="field"><stop stop-color="#12333b"/><stop offset="1" stop-color="#061720"/></radialGradient>
+    <pattern id="marks" width="21" height="21" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#50797f"/></pattern>
+    <g id="cross"><path d="M-5 0H5M0-5V5" stroke="#487074" stroke-width="1"/></g>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M1 0l5 3-5 3" fill="none" stroke="#82c8b2" stroke-width="1.25"/></marker>
+    <marker id="dimArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M1 0l5 3-5 3" fill="none" stroke="#83a1a4" stroke-width="1.25"/></marker>
+  </defs>
+  <path fill="url(#field)" d="M0 0h640v330H0z"/>
+  <path fill="url(#marks)" opacity=".49" d="M0 0h640v330H0z"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#23464d" stroke-dasharray="3 8"><path d="M58 158h525M286 56v224m131-224v224"/></g>
+    <g stroke="#527d83" stroke-width="1.3"><path d="M142 130h25q12 0 20 8l19 19m-64 30h25q12 0 20-8l19-20"/></g>
+    <path d="M142 158h103" stroke="#8ad9bd" stroke-width="2" marker-end="url(#arrow)"/>
+    <g fill="#0a202a" stroke="#518684" stroke-width="1.35">
+      <path d="M86 119h48v21H86z"/><path d="M86 176h48v21H86z"/>
+      <path d="M86 147h48v21H86z" stroke="#b3edd2"/>
+    </g>
+    <g stroke="#5d8585" stroke-width="1.5"><path d="M94 126h26m-26 6h18m-18 52h26m-26 6h16"/></g>
+    <path d="M94 154h29m-29 7h20" stroke="#b3edd2" stroke-width="1.5"/>
+    <path d="M286 126l32 32-32 32-32-32z" stroke="#a6daca" stroke-width="1.6" fill="#17353c"/>
+    <path d="M276 164l9-13 6 9 5-7" stroke="#c6f2dc" stroke-width="2"/>
+    <path d="M320 158h16q10 0 16-9l23-38q5-8 15-8h30" stroke="#82c8b2" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M320 158h16q10 0 16 9l23 38q5 8 15 8h30" stroke="#83a1a4" stroke-dasharray="4 5" stroke-width="1.7" marker-end="url(#dimArrow)"/>
+    <g stroke="#83b8a9" stroke-width="1.5"><path d="M432 92h22v16h-13l-6 5v-5h-3z"/><path d="M438 99h10"/></g>
+    <g stroke="#8ca4aa" stroke-width="1.5"><path d="M432 202h22v17h-13l-6 5v-5h-3z"/><path d="M439 211h8"/></g>
+  </g>
+  <g font-family="ui-monospace,Menlo,Consolas,monospace" fill="#b5d6d4">
+    <text x="109" y="231" text-anchor="middle" font-size="17">Three FAQs</text>
+    <text x="286" y="227" text-anchor="middle" font-size="17">Closest</text><text x="286" y="249" text-anchor="middle" font-size="17">match</text>
+    <text x="468" y="109" font-size="18" fill="#c4ecdd">Answer</text><text x="468" y="219" font-size="18" fill="#a5bec1">Fallback</text>
+  </g>
+  <use href="#cross" x="22" y="22"/><use href="#cross" x="618" y="22"/><use href="#cross" x="22" y="308"/><use href="#cross" x="618" y="308"/>
+</svg>

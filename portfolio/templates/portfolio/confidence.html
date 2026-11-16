@@ -1,0 +1,7 @@
+<div class="gate-interaction" data-gate hidden>
+  <div class="gate-prompt"><label for="gate-distance">Try the confidence gate</label><span>Local demonstration</span></div>
+  <p>Change the distance to the nearest FAQ. A confidence score of 70% or higher sends the match to the answer generator.</p>
+  <div class="gate-value"><span>Cosine distance</span><output for="gate-distance" id="gate-number">0.40</output></div>
+  <input type="range" id="gate-distance" aria-label="Cosine distance" min="0" max="2" step="0.05" value="0.40">
+  <output for="gate-distance" id="gate-result" aria-live="polite">80% confidence · Use the FAQ</output>
+</div>

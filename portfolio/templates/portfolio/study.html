@@ -1,0 +1,16 @@
+{% extends 'portfolio/base.html' %}
+{% load portfolio_urls %}
+{% block title %}{{ project.title }} — {{ site.name }}{% endblock %}
+{% block description %}{{ project.intro }}{% endblock %}
+{% block header_class %} scrolled{% endblock %}
+{% block head %}{% if project.demo == 'confidence' %}<script defer src="{% asset_url 'confidence.js' %}"></script>{% endif %}{% endblock %}
+{% block main %}
+<main id="main" class="study-page">
+  <section class="shell" id="top" aria-labelledby="study-title">
+    <a class="study-back" href="{% page_url 'home' %}#{{ project.id }}">← Selected work</a>
+    <span class="chapter">{{ project.category }}</span>
+    <h1 id="study-title">{{ project.title }}</h1>
+    {% include 'portfolio/project_body.html' with standalone=True %}
+  </section>
+</main>
+{% endblock %}

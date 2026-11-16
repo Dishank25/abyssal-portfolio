@@ -1,0 +1,216 @@
+{
+  "name": "Dishank Jain",
+  "role": "AI Engineer",
+  "location": "Noida, India",
+  "hero": {
+    "lead": "I build AI systems that can show where an answer came from."
+  },
+  "about": {
+    "paragraphs": [
+      "I started with datasets and Flutter screens. Working on both gave me a habit I still use. I follow an input all the way to the person who gets the result. In a support assistant, that means opening the source FAQ behind a reply. In a recommendation engine, it means checking why a product reached the top.",
+      "I’m based in Noida. My engineering work spans search, document extraction, recommendations, and computer vision. I currently work in AI consulting, bringing those engineering habits to conversations with business users."
+    ]
+  },
+  "experience": [
+    {
+      "company": "Cosmo Ferrites · Cosmo First Group",
+      "title": "Senior Executive, AI Consultant",
+      "dates": "Jul 2026 – present",
+      "body": "I work on applied AI adoption and prototype tools for business users. I bring a developer’s perspective to conversations about which problems are worth solving and what a useful result would look like."
+    },
+    {
+      "company": "Zigly Pet Care and Cosmo Films · Cosmo First Group",
+      "title": "Junior AI / Generative AI Engineer",
+      "dates": "Nov 2025 – Jun 2026",
+      "body": "I worked as a junior engineer across two Cosmo First Group businesses. The role gave me hands-on experience with Python services, applied machine learning, and evaluating model outputs before handing them to a user."
+    },
+    {
+      "company": "Lloyd Group of Institutions",
+      "title": "Software Developer, Flutter",
+      "dates": "Jul – Dec 2024",
+      "body": "I built reusable Flutter widgets in Dart, managed application state with Provider, and connected authentication flows to REST APIs. That work taught me to treat the interface and its underlying service as one user experience."
+    },
+    {
+      "company": "Ethical Edufabrica Pvt. Ltd.",
+      "title": "AI / Machine Learning Intern",
+      "dates": "May – Jun 2024",
+      "body": "I explored and cleaned datasets with pandas and NumPy, selected features, and evaluated scikit-learn models. Working through those steps gave me a foundation in understanding inputs before choosing a model."
+    }
+  ],
+  "projects": [
+    {
+      "id": "pawsupport",
+      "title": "PawSupport",
+      "category": "Retrieval and evaluation",
+      "intro": "A pet-care assistant that traces a customer’s question back to an approved FAQ.",
+      "paragraphs": [
+        "Customers can ask about the same policy in different words. I built a router that tries an exact FAQ match, a semantic match, and an alias lookup. When it finds a suitable FAQ, the language model can rephrase the approved answer.",
+        "To check the router, I used a labeled offline test set. Each answerable example points to its expected FAQ identifier. The evaluation can catch a persuasive reply that came from the wrong policy. Other examples check whether the system declines a question outside its scope."
+      ],
+      "tags": [
+        "Python",
+        "FastAPI",
+        "Semantic search",
+        "Offline evaluation"
+      ],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/Dishank25/ZiglyPawSupport"
+        },
+        {
+          "label": "Read the evaluation",
+          "url": "https://github.com/Dishank25/ZiglyPawSupport/blob/main/evaluation/run_evaluation.py"
+        },
+        {
+          "label": "See the test cases",
+          "url": "https://github.com/Dishank25/ZiglyPawSupport/blob/main/evaluation/test_cases_v1_strict.json"
+        }
+      ],
+      "diagram": "assets/faq-routing.svg"
+    },
+    {
+      "id": "supportpilot",
+      "title": "SupportPilot",
+      "category": "Semantic search and APIs",
+      "intro": "A support API with an explicit decision about when it has enough evidence to answer.",
+      "paragraphs": [
+        "A request enters through FastAPI. A rule-based agent labels the intent, and ChromaDB returns three candidate FAQs. The retrieval agent turns the closest result’s cosine distance into a score and checks it against a threshold.",
+        "A strong match supplies context for the language model. A weak match takes a fixed fallback path and skips the generation call. Separating retrieval from response generation makes that decision easy to trace in the code."
+      ],
+      "tags": [
+        "Python",
+        "FastAPI",
+        "ChromaDB",
+        "Embeddings"
+      ],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/Dishank25/supportpilot"
+        },
+        {
+          "label": "Trace the request",
+          "url": "https://github.com/Dishank25/supportpilot/blob/main/main.py"
+        },
+        {
+          "label": "Inspect the threshold",
+          "url": "https://github.com/Dishank25/supportpilot/blob/main/agents/retrieval_agent.py"
+        }
+      ],
+      "diagram": "assets/confidence-gate.svg",
+      "demo": "confidence"
+    },
+    {
+      "id": "abyssal-portfolio",
+      "title": "Abyssal Observatory",
+      "category": "Python web development",
+      "intro": "The Django application behind this portfolio, with an animated GitHub profile and a static edition for GitHub Pages.",
+      "paragraphs": [
+        "A recruiter can jump straight to a particular project. Each study has a Django route, while the homepage lets you expand projects in place. Both layouts use the same structured career and project content.",
+        "I use a Django management command to render those routes and collect their artwork into a portable static site. The animation has a still counterpart for people who prefer reduced motion."
+      ],
+      "tags": [
+        "Python",
+        "Django",
+        "Django templates",
+        "Static site generation"
+      ],
+      "links": [
+        {
+          "label": "Django repository",
+          "url": "https://github.com/Dishank25/abyssal-portfolio"
+        }
+      ]
+    },
+    {
+      "id": "veterinary-records",
+      "title": "Veterinary document extraction",
+      "category": "Structured data",
+      "intro": "A FastAPI service that turns veterinary PDFs into a workbook with separate record types.",
+      "paragraphs": [
+        "A veterinary document can hold a pet’s details, its treatment, and its next follow-up in the same file. I built a service that extracts those records, validates the fields, and writes each record type to its own Excel sheet. The structure lets a reviewer inspect a follow-up without reading the whole PDF again."
+      ],
+      "tags": [
+        "Python",
+        "FastAPI",
+        "PDF extraction",
+        "Structured outputs"
+      ],
+      "links": []
+    },
+    {
+      "id": "recommendations",
+      "title": "Product recommendations",
+      "category": "Applied machine learning",
+      "intro": "A purchase-history recommender that distinguishes repeat demand from one unusually large order.",
+      "paragraphs": [
+        "I used cosine similarity to find customers with similar purchase histories, then collected products their peers had bought. Ranking by quantity gave occasional bulk purchases too much influence. I switched the ranking signal to order frequency and excluded anything the customer had already purchased."
+      ],
+      "tags": [
+        "Collaborative filtering",
+        "Cosine similarity",
+        "Ranking"
+      ],
+      "links": []
+    },
+    {
+      "id": "breed-identification",
+      "title": "Pet breed identification",
+      "category": "Computer vision prototype",
+      "intro": "An image API that returns an explicit unknown result when the model has low confidence.",
+      "paragraphs": [
+        "I prototyped a service that accepts a pet photo and asks GPT-4o Vision for a structured prediction. I checked the image input, validated the model’s JSON, and mapped low reported confidence to an unknown result. A caller can handle that outcome directly instead of treating every prediction as a definite breed."
+      ],
+      "tags": [
+        "GPT-4o Vision",
+        "Structured outputs",
+        "Input validation"
+      ],
+      "links": []
+    }
+  ],
+  "skills": [
+    {
+      "title": "Retrieval and evaluation",
+      "body": "I use embeddings, semantic search, and ChromaDB to find relevant source material. Labeled queries and expected FAQ identifiers make retrieval behavior testable."
+    },
+    {
+      "title": "Python applications",
+      "body": "I use Django to render this portfolio and FastAPI to build REST services. I validate structured data with Pydantic and build interfaces with Streamlit. Git and structured logging help me trace changes and inspect requests."
+    },
+    {
+      "title": "Machine learning and data",
+      "body": "I use pandas and NumPy to prepare data, scikit-learn for machine learning, and cosine similarity and ranking for collaborative filtering."
+    },
+    {
+      "title": "Interface development",
+      "body": "I’ve built Flutter applications in Dart, using Provider for state management and REST integrations for authentication."
+    }
+  ],
+  "education": [
+    {
+      "title": "B.Tech in Computer Science and Engineering",
+      "institution": "United College of Engineering and Research, Greater Noida",
+      "date": "2020 – 2024"
+    },
+    {
+      "title": "Generative AI with NLP, Agentic AI and Fine Tuning",
+      "institution": "Euron",
+      "date": "Apr 2025"
+    }
+  ],
+  "contact": {
+    "body": "If you’re building an AI product around search, structured documents, or recommendations, I’d enjoy hearing what a good answer needs to look like for your users.",
+    "links": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/dishankjain25/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Dishank25"
+      }
+    ]
+  }
+}
