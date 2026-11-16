@@ -1,16 +1,15 @@
 {% extends 'portfolio/base.html' %}
 {% load portfolio_urls %}
 {% block head %}
-  <link rel="preload" href="{% asset_url 'assets/observatory.webp' %}" as="image">
-  <script defer src="{% asset_url 'site.js' %}"></script>
-  <script defer src="{% asset_url 'confidence.js' %}"></script>
+  <link rel="preload" href="{% asset_url 'assets/observatory-breathing.svg' %}" as="image">
+  <script defer src="{% asset_url 'site.js' %}?v=2"></script>
 {% endblock %}
 {% block main %}
 <main id="main">
   <section id="top" class="descent" aria-labelledby="hero-title">
     <div class="hero">
       <div class="hero-art" aria-hidden="true">
-        <img src="{% asset_url 'assets/observatory.webp' %}" data-character-motion="{% asset_url 'assets/character-scene.svg' %}" alt="" width="1920" height="711" fetchpriority="high">
+        <img src="{% asset_url 'assets/observatory-breathing.svg' %}" data-fallback="{% asset_url 'assets/observatory.webp' %}" alt="" width="1920" height="711" fetchpriority="high">
       </div>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="sunshaft" aria-hidden="true"></div>
@@ -25,9 +24,6 @@
       </div>
       <div class="hero-base shell">
         <span class="scene-caption">{% include 'portfolio/manta.html' %} Abyssal Observatory</span>
-        <button class="motion-button" type="button" data-motion hidden aria-pressed="false">
-          <span class="motion-icon" aria-hidden="true"></span><span data-motion-label>Pause motion</span>
-        </button>
       </div>
       <div class="depth-shade" aria-hidden="true"></div>
     </div>
@@ -37,7 +33,7 @@
       <div class="work-intro">
         <span class="chapter">Project studies</span>
         <h2 id="work-title">Selected <em>work.</em></h2>
-        <p>I build tools for finding answers in text, records, images, and purchase histories. These projects show how each system reaches a decision.</p>
+        <p>Explore my work in applied AI, Python, and mobile development. Each project explains the problem, the implementation, and the decisions behind it.</p>
         <figure class="room">
           <img src="{% asset_url 'assets/signal-room.webp' %}" width="1640" height="618" loading="lazy" alt="An illustrated deep-sea signal room overlooking a trail of underwater lamps.">
           <figcaption>The signal room</figcaption>
@@ -45,14 +41,14 @@
       </div>
       <div class="projects">
         {% for project in site.projects %}
-          <details class="project" id="{{ project.id }}"{% if forloop.first %} open{% endif %}>
-            <summary>
-              <span class="project-label">{{ project.category }}</span>
-              <span class="project-title">{{ project.title }}</span>
-              <span class="disclosure" aria-hidden="true"></span>
-            </summary>
-            {% include 'portfolio/project_body.html' with standalone=False %}
-          </details>
+          <article class="project" id="{{ project.id }}">
+            <a class="project-link" href="{% page_url 'study' project.id %}" aria-labelledby="project-title-{{ project.id }} project-action-{{ project.id }}">
+              <p class="project-label">{{ project.category }}</p>
+              <h3 class="project-title" id="project-title-{{ project.id }}">{{ project.title }}</h3>
+              <p class="project-intro">{{ project.intro }}</p>
+              <span class="project-action" id="project-action-{{ project.id }}">View project <span aria-hidden="true">→</span></span>
+            </a>
+          </article>
         {% endfor %}
       </div>
     </section>

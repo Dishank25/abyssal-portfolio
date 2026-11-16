@@ -107,8 +107,8 @@
       "category": "Python web development",
       "intro": "The Django application behind this portfolio, with an animated GitHub profile and a static edition for GitHub Pages.",
       "paragraphs": [
-        "A recruiter can jump straight to a particular project. Each study has a Django route, while the homepage lets you expand projects in place. Both layouts use the same structured career and project content.",
-        "I use a Django management command to render those routes and collect their artwork into a portable static site. The animation has a still counterpart for people who prefer reduced motion."
+        "Every project has its own Django route. The homepage lists the studies and opens them directly. A single structured content file supplies the project summaries and detail pages.",
+        "A Django management command renders the same routes and gathers the artwork into a portable static site. The character’s breathing loops automatically, while scroll lighting and other background effects are adjusted for visitors who prefer reduced motion."
       ],
       "tags": [
         "Python",
@@ -168,6 +168,99 @@
         "Input validation"
       ],
       "links": []
+    },
+    {
+      "id": "job-portal",
+      "title": "Student & Recruiter Job Portal",
+      "category": "Flutter · Mobile development",
+      "intro": "A two-sided Flutter app for browsing openings, posting jobs or internships, and reviewing applications.",
+      "paragraphs": [
+        "A student can move from search to an opening and start an application. A separate recruiter flow collects the role, skills, and screening questions for a job or internship posting. Recruiters can also open a list of applicants to review.",
+        "This repository hosts a shared app snapshot originally committed by an109. Its dependency configuration connects the screens to repositories, use cases, and BLoCs. Listings and applications need access to the configured backend."
+      ],
+      "tags": [
+        "Flutter",
+        "Dart",
+        "BLoC",
+        "REST APIs"
+      ],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/Dishank25/Job-Portal"
+        },
+        {
+          "label": "Opportunity posting form",
+          "url": "https://github.com/Dishank25/Job-Portal/blob/main/lib/views/post_opportunities/presentation/views/post_opportunity_screen.dart"
+        },
+        {
+          "label": "Original app snapshot",
+          "url": "https://github.com/Dishank25/Job-Portal/commit/d0c63d5458af34687316fe92be18caa91d13bb0b"
+        }
+      ],
+      "related": {
+        "id": "job-discovery",
+        "title": "Flutter Job Discovery"
+      }
+    },
+    {
+      "id": "job-discovery",
+      "title": "Flutter Job Discovery",
+      "category": "Flutter · Candidate experience",
+      "intro": "A related job-portal snapshot focused on skills onboarding, search filters, and the candidate’s application flow.",
+      "paragraphs": [
+        "The candidate’s signup flow groups skills and subskills by domain. When looking for a role, the candidate can set location and work-experience filters, then open the job details.",
+        "This snapshot shares code with the Student & Recruiter Job Portal. Its candidate flow exposes a useful state transition: the job details screen listens for the application result while a dedicated BLoC handles the submission event. Live listings and submissions depend on the configured backend."
+      ],
+      "tags": [
+        "Flutter",
+        "Dart",
+        "BLoC",
+        "Dio"
+      ],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/Dishank25/rishabh6363-jobflutter-448f346c9d38"
+        },
+        {
+          "label": "Skills onboarding",
+          "url": "https://github.com/Dishank25/rishabh6363-jobflutter-448f346c9d38/blob/Jobportalmain/lib/views/detailed_signup_student/presentation/views/signup_your_skills_view.dart"
+        },
+        {
+          "label": "Job application BLoC",
+          "url": "https://github.com/Dishank25/rishabh6363-jobflutter-448f346c9d38/blob/Jobportalmain/lib/views/job_related/presentation/bloc/job_apply_bloc/job_apply_bloc.dart"
+        }
+      ],
+      "related": {
+        "id": "job-portal",
+        "title": "Student & Recruiter Job Portal"
+      }
+    },
+    {
+      "id": "terminal-tic-tac-toe",
+      "title": "Terminal Tic-Tac-Toe",
+      "category": "Python · Game logic",
+      "intro": "A standard-library Python game that lets a human play tic-tac-toe against a computer in the terminal.",
+      "paragraphs": [
+        "Squares are numbered from one to nine. The human plays X and chooses an available square. The computer plays O by choosing randomly from the spaces still open.",
+        "The game checks rows, columns, and diagonals to detect a win and recognizes a draw when the board fills. The board, opponent logic, and turn loop are small enough to follow in one Python file."
+      ],
+      "tags": [
+        "Python",
+        "Standard library",
+        "Command-line interface"
+      ],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/Dishank25/python_project"
+        },
+        {
+          "label": "Read the game loop",
+          "url": "https://github.com/Dishank25/python_project/blob/main/TIC%20TAC%20TOE%20GAME/main.py"
+        }
+      ]
     }
   ],
   "skills": [

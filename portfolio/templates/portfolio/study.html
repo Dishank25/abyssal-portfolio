@@ -7,10 +7,10 @@
 {% block main %}
 <main id="main" class="study-page">
   <section class="shell" id="top" aria-labelledby="study-title">
-    <a class="study-back" href="{% page_url 'home' %}#{{ project.id }}">← Selected work</a>
+    <a class="study-back" href="{% page_url 'home' %}#work">← Selected work</a>
     <span class="chapter">{{ project.category }}</span>
     <h1 id="study-title">{{ project.title }}</h1>
-    {% include 'portfolio/project_body.html' with standalone=True %}
+    {% include 'portfolio/project_body.html' %}
   </section>
 </main>
 {% endblock %}

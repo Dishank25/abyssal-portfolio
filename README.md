@@ -1,6 +1,6 @@
 # Abyssal Observatory
 
-Dishank Jain’s AI engineering portfolio, built with Python and Django. Browse six project studies, four roles, and an interactive demo of the confidence threshold in SupportPilot.
+Dishank Jain’s AI engineering portfolio, built with Python and Django. Open the project studies, explore four career roles, and try the interactive confidence threshold in SupportPilot.
 
 [Visit the portfolio](https://dishank25.github.io/Dishank25/) · [Open the portfolio case study](https://dishank25.github.io/Dishank25/projects/abyssal-portfolio/) · [GitHub profile](https://github.com/Dishank25)
 
@@ -22,8 +22,8 @@ On Windows PowerShell, activate the environment with `.\.venv\Scripts\Activate.p
 ## How it works
 
 - [Career and project content](portfolio/content.json) supplies both the home page and each individual project page. To add a project, give its entry a unique URL slug in the `id` field, then edit its title, description, paragraphs, tags and source links.
-- [Django views](portfolio/views.py) serve the homepage at `/` and case studies at `/projects/<slug>/`. The [templates](portfolio/templates/portfolio/) reuse each case study’s body in both layouts.
-- [Static assets](portfolio/static/portfolio/) handle the character animation, scroll depth, mobile composition, and the keyboard-operated confidence slider. The motion control remembers a visitor’s preference and starts with a still scene when their system requests reduced motion.
+- [Django views](portfolio/views.py) serve the homepage at `/` and case studies at `/projects/<slug>/`. Each project row opens its own study in one tap, and old project bookmarks continue to work.
+- [Static assets](portfolio/static/portfolio/) handle the character animation, scroll depth, mobile composition, and the keyboard-operated confidence slider. The illustrated character breathes automatically. The interface reduces background effects for visitors who request reduced motion.
 - [The export command](portfolio/management/commands/export_site.py) renders the same Django views into HTML and copies their assets. GitHub Pages serves this static edition. Relative links work under both a domain root and a repository path.
 
 ## Verify and export

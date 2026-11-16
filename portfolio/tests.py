@@ -7,6 +7,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import SimpleTestCase
 from django.urls import reverse
+from django.utils.html import escape
 
 from .content import get_portfolio
 
@@ -18,7 +19,7 @@ class PageLinks(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         for name, value in attrs:
-            if name in {"href", "src", "data-character-motion"} and value:
+            if name in {"href", "src", "data-fallback"} and value:
                 self.targets.append(value)
 
 
@@ -29,10 +30,22 @@ class PortfolioTests(SimpleTestCase):
             with self.subTest(project=project["id"]):
                 url = reverse("portfolio:study", args=[project["id"]])
                 self.assertContains(home, f'id="{project["id"]}"')
+                self.assertContains(home, f'class="project-link" href="{url.lstrip("/")}"')
                 response = self.client.get(url)
-                self.assertContains(response, project["title"])
-                self.assertContains(response, f'../../#{project["id"]}')
+                self.assertContains(response, escape(project["title"]))
+                self.assertContains(response, 'href="../../#work"')
         self.assertEqual(self.client.get("/projects/unknown/").status_code, 404)
+
+    def test_home_opens_projects_without_script_or_intermediate_disclosure(self):
+        home = self.client.get("/")
+        self.assertNotContains(home, "<details")
+        self.assertNotContains(home, "Section link")
+        self.assertNotContains(home, "Pause motion")
+        self.assertContains(home, 'src="static/portfolio/assets/observatory-breathing.svg"')
+        self.assertContains(home, "View project", count=len(get_portfolio()["projects"]))
+        study = self.client.get("/projects/supportpilot/")
+        self.assertContains(study, 'id="gate-distance"')
+        self.assertContains(study, "confidence.js")
 
     def test_export_links_work_at_root_and_project_subpaths(self):
         with TemporaryDirectory() as temporary:
