@@ -7,24 +7,39 @@
   <title>{% block title %}{{ site.name }} — {{ site.role }}{% endblock %}</title>
   <meta name="description" content="{% block description %}AI engineer in Noida building search, document extraction, and recommendation systems. Explore technical case studies, experience, and selected code.{% endblock %}">
   <link rel="icon" type="image/svg+xml" href="{% asset_url 'assets/manta-mark.svg' %}">
-  <link rel="stylesheet" href="{% asset_url 'site.css' %}?v=2">
+  <script src="{% asset_url 'navigation.js' %}"></script>
+  <link rel="stylesheet" href="{% asset_url 'site.css' %}?v=3">
   {% block head %}{% endblock %}
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header{% block header_class %}{% endblock %}">
     <div class="header-inner">
-      <a class="brand" href="{% page_url 'home' %}#top" aria-label="{{ site.name }}, beginning">
+      <span class="brand">
         {% include 'portfolio/manta.html' %}<span>{{ site.name }}</span>
-      </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="{% page_url 'home' %}#work">Work</a>
-        <a href="{% page_url 'home' %}#about">About</a>
-        <a href="{% page_url 'home' %}#experience">Experience</a>
-        <a href="{% page_url 'home' %}#skills">Skills</a>
-        <a href="{% page_url 'home' %}#contact">Contact</a>
-      </nav>
-      <a class="header-github" href="https://github.com/Dishank25">GitHub <span aria-hidden="true">↗</span></a>
+      </span>
+      <div class="site-menu">
+        <button class="menu-toggle" type="button" popovertarget="site-menu-panel"
+                aria-label="Menu" aria-controls="site-menu-panel" aria-expanded="false">
+          <span class="menu-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button>
+        <div class="menu-sheet" id="site-menu-panel" popover="auto">
+          <nav class="main-nav" aria-label="Main navigation">
+            <a href="{% page_url 'home' %}#top">Home</a>
+            <a href="{% page_url 'home' %}#work">Work</a>
+            <a href="{% page_url 'home' %}#about">About</a>
+            <a href="{% page_url 'home' %}#experience">Experience</a>
+            <a href="{% page_url 'home' %}#skills">Skills</a>
+            <a href="{% page_url 'home' %}#contact">Contact</a>
+            <a href="https://github.com/Dishank25">GitHub <span aria-hidden="true">↗</span></a>
+          </nav>
+          <fieldset class="theme-picker" hidden>
+            <legend>Theme</legend>
+            <label><input type="radio" name="appearance" value="abyss" checked> Abyss</label>
+            <label><input type="radio" name="appearance" value="daylight"> Daylight</label>
+          </fieldset>
+        </div>
+      </div>
     </div>
   </header>
   {% block main %}{% endblock %}
@@ -36,5 +51,6 @@
       <a class="return" href="#top">Back to the surface <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
+  {% include "portfolio/assistant.html" %}
 </body>
 </html>

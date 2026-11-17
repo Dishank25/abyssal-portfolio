@@ -1,0 +1,119 @@
+.guide-dock {
+  --guide-gap: clamp(16px, 2.2vw, 32px);
+  --guide-rim: #45656b;
+  --guide-shadow: 0 12px 42px rgba(0, 10, 17, .38);
+  position: fixed;
+  z-index: 21;
+  right: max(var(--guide-gap), env(safe-area-inset-right));
+  bottom: max(var(--guide-gap), env(safe-area-inset-bottom));
+  color: var(--text);
+  font: 400 16px/1.5 var(--display);
+}
+.guide-dock [hidden] { display: none !important; }
+.guide-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.guide-launch {
+  display: flex; align-items: center; gap: 4px; padding: 1px 14px 1px 2px;
+  border: 1px solid #5a8185; border-radius: 34px;
+  color: #e0f7ee; background: linear-gradient(135deg, #12303a, #0a2029);
+  box-shadow: var(--guide-shadow);
+}
+.guide-launch:hover, .guide-launch:focus-visible { border-color: #b5ecdc; }
+.guide-bot { display: block; width: 58px; height: 58px; object-fit: contain; animation: guide-drift 4.4s ease-in-out infinite; }
+.guide-launch-text { font-size: .79rem; font-weight: 600; white-space: nowrap; }
+.guide-launch-text span { margin-left: 3px; color: #a1ecd7; }
+@keyframes guide-drift { 0%, 100% { transform: translateY(1px) rotate(-2deg); } 50% { transform: translateY(-2px) rotate(2deg); } }
+.guide-dock.is-open {
+  bottom: calc(max(var(--guide-gap), env(safe-area-inset-bottom)) + var(--guide-keyboard, 0px));
+}
+.guide-dock.is-open .guide-launch { display: none; }
+.guide-panel {
+  display: flex; flex-direction: column; overflow: hidden;
+  width: min(382px, calc(100vw - 2 * var(--guide-gap)));
+  max-height: min(570px, calc(100vh - var(--header-height) - 2 * var(--guide-gap)));
+  max-height: min(570px, calc(var(--guide-space, 100dvh) - 2 * var(--guide-gap) - 8px));
+  border: 1px solid var(--guide-rim); border-radius: 20px;
+  background: var(--ink); box-shadow: var(--guide-shadow);
+}
+.guide-head {
+  flex: none; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
+  padding: 11px 12px 12px; border-bottom: 1px solid var(--rule); background: var(--ink-raised);
+}
+.guide-emblem {
+  display: block; width: 48px; height: 48px; padding: 3px; object-fit: contain; border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 94%, #285059, #17323c 76%);
+}
+.guide-head h2 { margin: 0; color: var(--text); font: 600 1.05rem/1.2 var(--display); letter-spacing: -.03em; }
+.guide-head p { margin: 3px 0 0; color: var(--muted); font-size: .78rem; line-height: 1.3; }
+.guide-close, .guide-send {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px;
+  padding: 0; border: none; border-radius: 50%; background: transparent; color: var(--text);
+}
+.guide-close:hover { color: var(--mint); background: var(--ink); }
+.guide-close svg, .guide-send svg { width: 20px; height: 20px; }
+.guide-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--rule) transparent; padding: 19px 17px; }
+.guide-dock p { overflow-wrap: anywhere; }
+.guide-welcome, .guide-message { font-size: .93rem; line-height: 1.53; }
+.guide-welcome { color: var(--text); margin: 0; }
+.guide-message { margin-top: 16px; }
+.guide-message p { margin: 0; white-space: pre-line; }
+.guide-question {
+  width: fit-content; max-width: 90%; margin-left: auto; padding: 8px 12px;
+  color: var(--text); border: 1px solid var(--rule); border-radius: 12px 12px 3px 12px;
+  background: var(--ink-raised);
+}
+.guide-reply { padding-left: 11px; border-left: 2px solid var(--guide-rim); }
+.guide-links { display: flex; flex-wrap: wrap; gap: 6px 13px; margin-top: 8px; }
+.guide-links a {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 28px;
+  color: var(--mint); font-size: .79rem; font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+.guide-links a::after { content: "↗"; }
+.guide-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; }
+.guide-suggestions:empty { display: none; }
+.guide-suggestions button {
+  padding: 6px 10px; border: 1px solid var(--guide-rim); border-radius: 12px;
+  color: var(--mint); background: transparent; text-align: left; font-size: .78rem; line-height: 1.45;
+}
+.guide-suggestions button:hover, .guide-suggestions button:focus-visible { background: var(--ink-raised); }
+.guide-compose {
+  flex: none; display: flex; align-items: center; gap: 6px;
+  margin: 0; padding: 8px 9px 8px 16px;
+  border-top: 1px solid var(--rule); background: var(--ink-raised);
+}
+.guide-compose input {
+  min-width: 0; width: 100%; height: 36px; margin: 0; padding: 4px;
+  border: 0; border-radius: 4px; color: var(--text); background: transparent;
+  font: 400 16px/1.25 var(--display);
+}
+.guide-compose input::placeholder { color: var(--muted); opacity: 1; }
+.guide-send { width: 38px; height: 38px; border-radius: 12px; color: var(--ink); background: var(--mint); }
+.guide-send:hover { filter: brightness(1.08); }
+.guide-dock button:focus-visible, .guide-dock a:focus-visible, .guide-dock input:focus-visible,
+.guide-scroll:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.guide-scroll:focus-visible { outline-offset: -3px; }
+html[data-theme="daylight"] .guide-dock { --guide-rim: #71948c; --guide-shadow: 0 10px 38px rgba(16, 49, 47, .19); }
+html[data-theme="daylight"] .guide-launch {
+  background: linear-gradient(135deg, #234f54, #163a44); border-color: #567b75;
+}
+@media (max-width: 650px) {
+  .guide-dock { --guide-gap: 12px; right: max(12px, env(safe-area-inset-right)); }
+  .guide-launch { padding: 0; border-radius: 50%; }
+  .guide-bot { width: 56px; height: 56px; }
+  .guide-launch-text { display: none; }
+  .guide-panel { border-radius: 16px; width: min(382px, calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); }
+  .guide-head { padding-block: 8px; }
+  .guide-close, .guide-send { width: 44px; height: 44px; }
+  .guide-suggestions button { min-height: 38px; }
+  .guide-links a { min-height: 35px; }
+  footer .shell { padding-bottom: max(76px, calc(env(safe-area-inset-bottom) + 65px)); }
+}
+@media (max-height: 450px) {
+  .guide-head { padding-block: 3px; }
+  .guide-emblem { width: 34px; height: 34px; }
+  .guide-scroll { padding-block: 9px; }
+  .guide-compose { padding-block: 3px; }
+}
+@media (prefers-reduced-motion: reduce) { .guide-bot { animation: none; } }

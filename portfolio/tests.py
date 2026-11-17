@@ -1,3 +1,5 @@
+import json
+
 from html.parser import HTMLParser
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -16,11 +18,28 @@ class PageLinks(HTMLParser):
     def __init__(self):
         super().__init__()
         self.targets = []
+        self.home_sources = []
+        self.has_index = False
+        self._reading_index = False
+        self.index_text = []
 
     def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if "data-guide" in attributes:
+            self.home_sources.append(attributes.get("data-home"))
+        if tag == "script" and attributes.get("id") == "guide-data":
+            self._reading_index = self.has_index = True
         for name, value in attrs:
             if name in {"href", "src", "data-fallback"} and value:
                 self.targets.append(value)
+
+    def handle_data(self, data):
+        if self._reading_index:
+            self.index_text.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "script":
+            self._reading_index = False
 
 
 class PortfolioTests(SimpleTestCase):
@@ -71,6 +90,22 @@ class PortfolioTests(SimpleTestCase):
                             if local.is_dir():
                                 local = local / "index.html"
                             self.assertTrue(local.is_file(), str(local))
+
+    def test_guide_reads_the_public_homepage_from_every_route(self):
+        site = get_portfolio()
+        projects = [reverse("portfolio:study", args=[item["id"]]) for item in site["projects"]]
+        for route in ["/", *projects]:
+            with self.subTest(route=route):
+                response = self.client.get(route)
+                parser = PageLinks()
+                parser.feed(response.content.decode())
+                self.assertEqual(len(parser.home_sources), 1)
+                for base in ("/", "/Dishank25/"):
+                    home = "https://example.test" + base
+                    self.assertEqual(urljoin(home + route.lstrip("/"), parser.home_sources[0]), home)
+                self.assertEqual(parser.has_index, route == "/")
+                if parser.has_index:
+                    self.assertEqual(json.loads("".join(parser.index_text)), site)
 
     def test_successive_export_and_unrelated_files(self):
         with TemporaryDirectory() as temporary:

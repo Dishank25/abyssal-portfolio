@@ -62,7 +62,7 @@
   window.addEventListener('resize', schedule, {passive: true});
   reduced.addEventListener('change', schedule);
 
-  const links = [...document.querySelectorAll('.main-nav a')];
+  const links = [...document.querySelectorAll('.main-nav a')].filter(link => link.hash);
   if ('IntersectionObserver' in window) {
     const active = new Set();
     const observe = new IntersectionObserver(entries => {

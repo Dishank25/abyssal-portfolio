@@ -108,7 +108,8 @@
       "intro": "The Django application behind this portfolio, with an animated GitHub profile and a static edition for GitHub Pages.",
       "paragraphs": [
         "Every project has its own Django route. The homepage lists the studies and opens them directly. A single structured content file supplies the project summaries and detail pages.",
-        "A Django management command renders the same routes and gathers the artwork into a portable static site. The character’s breathing loops automatically, while scroll lighting and other background effects are adjusted for visitors who prefer reduced motion."
+        "A Django management command renders the same routes and gathers the artwork into a portable static site. The character’s breathing loops automatically, while scroll lighting and other background effects are adjusted for visitors who prefer reduced motion.",
+        "The floating robot answers visitors’ questions by searching the published portfolio in their browser. It can follow a question about a project back to the case study. Visitors can also switch between Abyss and Daylight in the menu and keep their preferred theme when they open another project."
       ],
       "tags": [
         "Python",
