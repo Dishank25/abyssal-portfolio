@@ -176,9 +176,9 @@
     function respond(question) {
       const q = normalize(question);
       if (!q) return answer("Ask me about Dishank’s projects, tools, education or experience.");
-      const guideQuestion = /\b(who built you|how do you (?:answer|work)|are you an ai|are you real|are you dishank|what can you do|who are you|this robot|this chatbot|this guide|observatory guide|send my question|store my questions|save my messages|questions leave|powered by (?:openai|a language model))\b/;
+      const guideQuestion = /\b(who built you|how do you (?:answer|work)|are you an ai|are you real|are you dishank|what can you do|who are you|what(?:s| is) your name|your name|what are you called|who (?:is|s) abby|whos abby|what does abby do|what is abby|this robot|this chatbot|this guide|observatory guide|send my question|store my questions|save my messages|questions leave|powered by (?:openai|a language model))\b/;
       if (guideQuestion.test(q)) {
-        return answer("I’m an automated guide to Dishank’s public portfolio. I match your question to published projects, skills and career notes in this browser, and include source links. Your messages stay in the page. For a personal reply, reach Dishank on LinkedIn.", [section("about"), ...contact().slice(0,1)]);
+        return answer("I’m Abby, Dishank’s robo assistant. I’m here to help you explore his portfolio. I match your question to published projects, skills and career notes in this browser, and include source links. Your messages stay in the page. For a personal reply, reach Dishank on LinkedIn.", [section("about"), ...contact().slice(0,1)]);
       }
       const commitment = /\b(job offer|offer letter|my terms|our terms|accept (?:an?|our|my|the) (?:offer|contract|position)|agree to|sign (?:an?|our|my|the) contract|can (?:he|dishank) start)\b/.test(q);
       if (unknownTopics.test(q) || commitment) return unavailable();
@@ -246,7 +246,7 @@
         lastTopic="about";focus=[];
         return answer(site.name+" is an AI engineer based in "+site.location+". "+roleQuote(site.hero.lead)+" His work covers semantic search, document extraction, recommendations, and computer vision.",[section("about"),section("work")],["What has he built?", "What is his current role?"]);
       }
-      if (/\b(hi|hello|hey|help|start)\b/.test(q) && q.split(" ").length<6) return answer("I’m Dishank’s portfolio guide. Ask about his engineering work, career, skills or a particular project.",[section("about")],["What has he built?", "Which tools does he use?"]);
+      if (/\b(hi|hello|hey|help|start)\b/.test(q) && q.split(" ").length<6) return answer("Hi, I’m Abby, Dishank’s robo assistant. Ask about his engineering work, career, skills or a particular project.",[section("about")],["What has he built?", "Which tools does he use?"]);
       if (/\b(github|repos|repositories|source code)\b/.test(q) && ranked[0].matched<=1) return answer("Dishank publishes his code on GitHub. Individual case studies link to the repositories where source is available.",[contact().find(l=>l.label==="GitHub"),section("work")]);
       if (/\b(what (?:has|have) (?:he|you|dishank) (?:built|made)|his projects|your projects|featured work|portfolio projects|selected work)\b/.test(q)) return projectList(projects, "These are the projects in Dishank’s portfolio.");
       if (tech.length && technicalProjects.length) return projectList(technicalProjects,"These case studies use "+tech.join(" and ")+".");
@@ -269,5 +269,5 @@
       return answer(responses.map(r=>r.text).join("\n\n"), [...links.values()], responses[responses.length - 1].prompts);
     }};
   }
-  window.ObservatoryGuide = {create};
+  window.ObservatoryGuide = {name: 'Abby', create};
 })();

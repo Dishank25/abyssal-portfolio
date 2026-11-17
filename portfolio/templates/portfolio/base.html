@@ -8,16 +8,14 @@
   <meta name="description" content="{% block description %}AI engineer in Noida building search, document extraction, and recommendation systems. Explore technical case studies, experience, and selected code.{% endblock %}">
   <link rel="icon" type="image/svg+xml" href="{% asset_url 'assets/manta-mark.svg' %}">
   <script src="{% asset_url 'navigation.js' %}"></script>
-  <link rel="stylesheet" href="{% asset_url 'site.css' %}?v=3">
+  <link rel="stylesheet" href="{% asset_url 'site.css' %}?v=4">
   {% block head %}{% endblock %}
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header{% block header_class %}{% endblock %}">
     <div class="header-inner">
-      <span class="brand">
-        {% include 'portfolio/manta.html' %}<span>{{ site.name }}</span>
-      </span>
+      <span class="observatory-mark" aria-hidden="true">{% include 'portfolio/manta.html' %}</span>
       <div class="site-menu">
         <button class="menu-toggle" type="button" popovertarget="site-menu-panel"
                 aria-label="Menu" aria-controls="site-menu-panel" aria-expanded="false">
@@ -31,7 +29,7 @@
             <a href="{% page_url 'home' %}#experience">Experience</a>
             <a href="{% page_url 'home' %}#skills">Skills</a>
             <a href="{% page_url 'home' %}#contact">Contact</a>
-            <a href="https://github.com/Dishank25">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/Dishank25">GitHub</a>
           </nav>
           <fieldset class="theme-picker" hidden>
             <legend>Theme</legend>
@@ -48,7 +46,7 @@
       <a class="brand" href="{% page_url 'home' %}#top">
         {% include 'portfolio/manta.html' %}<span>{{ site.name }}</span>
       </a>
-      <a class="return" href="#top">Back to the surface <span aria-hidden="true">↑</span></a>
+      <a class="return" href="#top">Back to the surface</a>
     </div>
   </footer>
   {% include "portfolio/assistant.html" %}

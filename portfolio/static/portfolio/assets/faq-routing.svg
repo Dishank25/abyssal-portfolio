@@ -4,18 +4,15 @@
   <defs>
     <radialGradient id="field"><stop stop-color="#12333b"/><stop offset="1" stop-color="#061720"/></radialGradient>
     <pattern id="marks" width="21" height="21" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#50797f"/></pattern>
-    <g id="cross"><path d="M-5 0H5M0-5V5" stroke="#487074" stroke-width="1"/></g>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M1 0l5 3-5 3" fill="none" stroke="#72bda9" stroke-width="1.25"/></marker>
   </defs>
   <path fill="url(#field)" d="M0 0h640v330H0z"/>
   <path fill="url(#marks)" opacity=".49" d="M0 0h640v330H0z"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="#23464d" stroke-dasharray="3 8" d="M60 119h515M111 52v203m204-203v203m197-203v203"/>
-    <path stroke="#72bda9" stroke-width="2" marker-end="url(#arrow)" d="M142 119h135"/>
-    <path stroke="#72bda9" stroke-width="2" marker-end="url(#arrow)" d="M349 119h127"/>
+    <path stroke="#72bda9" stroke-width="2" d="M142 119h135"/>
+    <path stroke="#72bda9" stroke-width="2" d="M349 119h127"/>
     <g stroke="#75b9b0" stroke-width="1.6">
       <path d="M111 151v46q0 9 9 9h183q12 0 12 11v9M315 151v74m197-74v46q0 9-9 9H327q-12 0-12 11"/>
-      <path d="M315 218v17" marker-end="url(#arrow)"/>
+      <path d="M315 218v17"/>
     </g>
     <g fill="#0a1f29" stroke="#5b9a97" stroke-width="1.2">
       <circle cx="111" cy="119" r="31"/><circle cx="315" cy="119" r="31"/><circle cx="512" cy="119" r="31"/>
@@ -34,5 +31,4 @@
     <text x="111" y="75" font-size="21">Exact</text><text x="315" y="75" font-size="21">Semantic</text><text x="512" y="75" font-size="21">Alias</text>
     <text x="315" y="293" font-size="18" fill="#c4ecdd">Curated FAQ</text>
   </g>
-  <use href="#cross" x="22" y="22"/><use href="#cross" x="618" y="22"/><use href="#cross" x="22" y="308"/><use href="#cross" x="618" y="308"/>
 </svg>

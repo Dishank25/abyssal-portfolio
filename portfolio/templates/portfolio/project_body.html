@@ -6,9 +6,9 @@
   {% endif %}
   {% for paragraph in project.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
   {% if project.demo == 'confidence' %}{% include 'portfolio/confidence.html' %}{% endif %}
-  <p class="case-tags">{{ project.tags|join:" · " }}</p>
+  <p class="case-tags">{{ project.tags|join:", " }}</p>
   {% if project.links %}<div class="case-links">
-    {% for link in project.links %}<a href="{{ link.url }}">{{ link.label }} <span aria-hidden="true">↗</span></a>{% endfor %}
-    {% if project.related %}<a href="{% page_url 'study' project.related.id %}">{{ project.related.title }} <span aria-hidden="true">→</span></a>{% endif %}
+    {% for link in project.links %}<a href="{{ link.url }}">{{ link.label }}</a>{% endfor %}
+    {% if project.related %}<a href="{% page_url 'study' project.related.id %}">{{ project.related.title }}</a>{% endif %}
   </div>{% endif %}
 </div>

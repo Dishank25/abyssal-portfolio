@@ -1,5 +1,6 @@
 import json
 
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -106,6 +107,16 @@ class PortfolioTests(SimpleTestCase):
                 self.assertEqual(parser.has_index, route == "/")
                 if parser.has_index:
                     self.assertEqual(json.loads("".join(parser.index_text)), site)
+
+    def test_navigation_and_guide_keep_plain_text_labels_on_every_page(self):
+        projects = [reverse("portfolio:study", args=[item["id"]]) for item in get_portfolio()["projects"]]
+        for route in ["/", *projects]:
+            with self.subTest(route=route):
+                html = unescape(self.client.get(route).content.decode())
+                self.assertNotRegex(html, r"[\u2190-\u21ff]")
+                self.assertIn("Chat with Abby", html)
+                self.assertIn("Close chat with Abby", html)
+                self.assertIn("Send</button>", html)
 
     def test_successive_export_and_unrelated_files(self):
         with TemporaryDirectory() as temporary:

@@ -11,6 +11,20 @@
   window.addEventListener('hashchange', openBookmarkedProject);
 
   const header = document.querySelector('.site-header');
+  // Upgrade older static homepages that still contain the wordmark and link ornaments.
+  const wordmark = header.querySelector('.brand');
+  if (wordmark) {
+    wordmark.className = 'observatory-mark';
+    wordmark.setAttribute('aria-hidden', 'true');
+    wordmark.querySelector('span')?.remove();
+    document.querySelector('.hero-role .slash')?.replaceWith('in');
+    const ornaments = document.querySelectorAll(
+      '.hero-base, .hero-role > span:empty, main .chapter, .room > figcaption, .main-nav a > span[aria-hidden], ' +
+      '.action > span[aria-hidden], .project-action > span[aria-hidden], ' +
+      '.contact-links a > span[aria-hidden], footer .return > span[aria-hidden]'
+    );
+    for (const ornament of ornaments) ornament.remove();
+  }
   const hero = document.querySelector('.hero');
   const descent = document.querySelector('.descent');
   const room = document.querySelector('.room');

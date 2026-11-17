@@ -1,6 +1,10 @@
 .guide-dock {
   --guide-gap: clamp(16px, 2.2vw, 32px);
   --guide-rim: #45656b;
+  --abby-size: clamp(140px, 14vw, 172px);
+  --abby-pop: #0b2027;
+  --abby-pop-rim: #62978d;
+  --abby-greeting-text: #edf9f3;
   --guide-shadow: 0 12px 42px rgba(0, 10, 17, .38);
   position: fixed;
   z-index: 21;
@@ -14,6 +18,7 @@
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }
 .guide-launch {
+  position: absolute; right: 0; bottom: 0;
   display: flex; align-items: center; gap: 4px; padding: 1px 14px 1px 2px;
   border: 1px solid #5a8185; border-radius: 34px;
   color: #e0f7ee; background: linear-gradient(135deg, #12303a, #0a2029);
@@ -22,12 +27,85 @@
 .guide-launch:hover, .guide-launch:focus-visible { border-color: #b5ecdc; }
 .guide-bot { display: block; width: 58px; height: 58px; object-fit: contain; animation: guide-drift 4.4s ease-in-out infinite; }
 .guide-launch-text { font-size: .79rem; font-weight: 600; white-space: nowrap; }
-.guide-launch-text span { margin-left: 3px; color: #a1ecd7; }
 @keyframes guide-drift { 0%, 100% { transform: translateY(1px) rotate(-2deg); } 50% { transform: translateY(-2px) rotate(2deg); } }
-.guide-dock.is-open {
+.guide-dock[data-state="chat"], .guide-dock.is-open {
   bottom: calc(max(var(--guide-gap), env(safe-area-inset-bottom)) + var(--guide-keyboard, 0px));
 }
-.guide-dock.is-open .guide-launch { display: none; }
+.guide-dock[data-state]:not([data-state="docked"]) .guide-launch,
+.guide-dock.is-open .guide-launch { visibility: hidden; pointer-events: none; }
+
+/* Flight positions come from the stage and the real launcher, even while it is hidden. */
+.guide-stage {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  pointer-events: none;
+}
+.abby-station {
+  position: absolute; left: 50%; top: 43%; width: var(--abby-size);
+  transform: translate(-50%, -50%);
+}
+.abby-craft {
+  position: relative; display: block; width: 100%; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit;
+  pointer-events: none; touch-action: manipulation;
+}
+.guide-dock[data-state="greeting"] .abby-craft,
+.guide-dock[data-state="entering"] .abby-flight { pointer-events: auto; cursor: pointer; }
+.abby-flight, .abby-hover { position: relative; display: block; width: 100%; }
+.abby-flight { transform-origin: 50% 53%; transform-style: preserve-3d; }
+.abby-hover { transform-origin: 51% 70%; }
+.abby-robot { position: relative; z-index: 1; display: block; width: 100%; height: auto; user-select: none; }
+.abby-plume {
+  --exhaust-length: 1;
+  position: absolute; top: 86.7%; left: 46.2%; z-index: 0;
+  width: 4.1%; height: 14.5%; border-radius: 48% 48% 75% 75%;
+  transform: translateX(-50%) scaleY(var(--exhaust-length)); transform-origin: 50% 0;
+  background: radial-gradient(ellipse at 50% 0, #fff3b0 6%, #f4bd63 22%, #81f5d7 44%, rgba(82, 231, 221, .48) 60%, transparent 74%);
+  opacity: .9;
+}
+.abby-plume::before {
+  content: ""; position: absolute; top: 0; bottom: 1%; left: -78%; right: -78%;
+  background: radial-gradient(ellipse at center top, rgba(114, 239, 202, .5), transparent 68%);
+}
+.abby-plume--right { left: 59.5%; }
+.guide-dock[data-state="entering"] .abby-plume,
+.guide-dock[data-state="docking"] .abby-plume { --exhaust-length: 1.65; animation: abby-thrust .26s ease-in-out infinite alternate; }
+.guide-dock[data-state="greeting"] .abby-hover { animation: abby-idle 3.8s ease-in-out infinite; }
+.guide-dock[data-state="greeting"] .abby-plume { --exhaust-length: .87; opacity: .8; }
+@keyframes abby-idle { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(.65deg); } }
+@keyframes abby-thrust { to { transform: translateX(-50%) scaleY(1.92); opacity: 1; } }
+
+.abby-greeting {
+  position: absolute; top: calc(100% + 11px); left: 50%; width: max-content;
+  max-width: min(336px, calc(100vw - 32px)); display: flex; align-items: flex-start;
+  border: 1px solid var(--abby-pop-rim); border-radius: 18px;
+  background: var(--abby-pop); color: var(--abby-greeting-text);
+  box-shadow: var(--guide-shadow); pointer-events: none; opacity: 0; visibility: hidden;
+  transform: translate(-50%, 5px);
+}
+.abby-greeting::before {
+  content: ""; position: absolute; left: calc(50% - 5px); top: -5px;
+  width: 8px; height: 8px; border: solid var(--abby-pop-rim); border-width: 1px 0 0 1px;
+  background: var(--abby-pop); transform: rotate(45deg);
+}
+.guide-dock[data-state="greeting"] .abby-greeting {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%, 0); transition: opacity .2s ease-out, transform .2s ease-out;
+}
+.abby-talk {
+  position: relative; flex: 1 1 auto; min-width: 0; min-height: 58px; margin: 0;
+  padding: 12px 5px 13px 17px; border: 0; border-radius: 17px 0 0 17px;
+  background: transparent; color: inherit; text-align: left;
+  font: 500 15px/1.42 var(--display); cursor: pointer; touch-action: manipulation;
+}
+.abby-talk strong { display: block; color: var(--mint); font-weight: 650; }
+.abby-talk:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.abby-greeting .abby-dismiss {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px;
+  margin: 4px 3px 0 0; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: var(--muted); cursor: pointer; touch-action: manipulation;
+}
+.abby-dismiss:hover { background: var(--ink-raised); color: var(--text); }
+.abby-dismiss svg { width: 16px; height: 16px; }
 .guide-panel {
   display: flex; flex-direction: column; overflow: hidden;
   width: min(382px, calc(100vw - 2 * var(--guide-gap)));
@@ -51,7 +129,7 @@
   padding: 0; border: none; border-radius: 50%; background: transparent; color: var(--text);
 }
 .guide-close:hover { color: var(--mint); background: var(--ink); }
-.guide-close svg, .guide-send svg { width: 20px; height: 20px; }
+.guide-close svg { width: 20px; height: 20px; }
 .guide-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--rule) transparent; padding: 19px 17px; }
 .guide-dock p { overflow-wrap: anywhere; }
 .guide-welcome, .guide-message { font-size: .93rem; line-height: 1.53; }
@@ -70,7 +148,6 @@
   color: var(--mint); font-size: .79rem; font-weight: 600;
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
 }
-.guide-links a::after { content: "↗"; }
 .guide-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; }
 .guide-suggestions:empty { display: none; }
 .guide-suggestions button {
@@ -89,31 +166,44 @@
   font: 400 16px/1.25 var(--display);
 }
 .guide-compose input::placeholder { color: var(--muted); opacity: 1; }
-.guide-send { width: 38px; height: 38px; border-radius: 12px; color: var(--ink); background: var(--mint); }
+.guide-send { width: auto; min-width: 58px; height: 38px; padding-inline: 13px; border-radius: 12px; color: var(--ink); background: var(--mint); font: 650 .86rem/1 var(--display); }
 .guide-send:hover { filter: brightness(1.08); }
 .guide-dock button:focus-visible, .guide-dock a:focus-visible, .guide-dock input:focus-visible,
 .guide-scroll:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
 .guide-scroll:focus-visible { outline-offset: -3px; }
-html[data-theme="daylight"] .guide-dock { --guide-rim: #71948c; --guide-shadow: 0 10px 38px rgba(16, 49, 47, .19); }
+html[data-theme="daylight"] .guide-dock {
+  --guide-rim: #71948c; --guide-shadow: 0 10px 38px rgba(16, 49, 47, .19);
+  --abby-pop: #f2f8ef; --abby-pop-rim: #638d82; --abby-greeting-text: #173e38;
+}
 html[data-theme="daylight"] .guide-launch {
   background: linear-gradient(135deg, #234f54, #163a44); border-color: #567b75;
 }
 @media (max-width: 650px) {
-  .guide-dock { --guide-gap: 12px; right: max(12px, env(safe-area-inset-right)); }
+  .guide-dock { --guide-gap: 12px; --abby-size: clamp(119px, 33vw, 142px); right: max(12px, env(safe-area-inset-right)); }
   .guide-launch { padding: 0; border-radius: 50%; }
   .guide-bot { width: 56px; height: 56px; }
   .guide-launch-text { display: none; }
   .guide-panel { border-radius: 16px; width: min(382px, calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); }
   .guide-head { padding-block: 8px; }
-  .guide-close, .guide-send { width: 44px; height: 44px; }
+  .guide-close { width: 44px; height: 44px; }
+  .guide-send { height: 44px; }
+  .abby-greeting .abby-dismiss { width: 44px; height: 44px; margin-top: 2px; }
   .guide-suggestions button { min-height: 38px; }
   .guide-links a { min-height: 35px; }
   footer .shell { padding-bottom: max(76px, calc(env(safe-area-inset-bottom) + 65px)); }
 }
 @media (max-height: 450px) {
+  .guide-dock { --abby-size: clamp(76px, 25vh, 106px); }
+  .abby-station { top: 40%; }
+  .abby-greeting { top: calc(100% + 6px); }
+  .abby-talk { min-height: 48px; padding-block: 8px; }
   .guide-head { padding-block: 3px; }
   .guide-emblem { width: 34px; height: 34px; }
   .guide-scroll { padding-block: 9px; }
   .guide-compose { padding-block: 3px; }
 }
-@media (prefers-reduced-motion: reduce) { .guide-bot { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .guide-bot, .guide-dock[data-state] .abby-hover, .guide-dock[data-state] .abby-plume { animation: none; }
+  .guide-dock[data-state="greeting"] .abby-greeting { transition: none; }
+}
+@media print { .guide-dock { display: none !important; } }

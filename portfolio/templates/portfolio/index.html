@@ -16,14 +16,11 @@
       <div class="particles" aria-hidden="true"></div>
       <div class="hero-inner shell">
         <div class="hero-copy">
-          <p class="hero-role"><span></span>{{ site.role }} <span class="slash">/</span> {{ site.location }}</p>
+          <p class="hero-role">{{ site.role }} in {{ site.location }}</p>
           <h1 id="hero-title">Dishank <em>Jain.</em></h1>
           <p class="hero-intro">{{ site.hero.lead }}</p>
-          <a class="action" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
+          <a class="action" href="#work">Explore my work</a>
         </div>
-      </div>
-      <div class="hero-base shell">
-        <span class="scene-caption">{% include 'portfolio/manta.html' %} Abyssal Observatory</span>
       </div>
       <div class="depth-shade" aria-hidden="true"></div>
     </div>
@@ -31,12 +28,10 @@
   <div id="work" class="work-area">
     <section class="work shell" aria-labelledby="work-title">
       <div class="work-intro">
-        <span class="chapter">Project studies</span>
         <h2 id="work-title">Selected <em>work.</em></h2>
         <p>Explore my work in applied AI, Python, and mobile development. Each project explains the problem, the implementation, and the decisions behind it.</p>
         <figure class="room">
           <img src="{% asset_url 'assets/signal-room.webp' %}" width="1640" height="618" loading="lazy" alt="An illustrated deep-sea signal room overlooking a trail of underwater lamps.">
-          <figcaption>The signal room</figcaption>
         </figure>
       </div>
       <div class="projects">
@@ -46,7 +41,7 @@
               <p class="project-label">{{ project.category }}</p>
               <h3 class="project-title" id="project-title-{{ project.id }}">{{ project.title }}</h3>
               <p class="project-intro">{{ project.intro }}</p>
-              <span class="project-action" id="project-action-{{ project.id }}">View project <span aria-hidden="true">→</span></span>
+              <span class="project-action" id="project-action-{{ project.id }}">View project</span>
             </a>
           </article>
         {% endfor %}
@@ -55,7 +50,7 @@
   </div>
   <section class="about band" id="about" aria-labelledby="about-title">
     <div class="shell about-grid">
-      <div><span class="chapter">About me</span><h2 id="about-title">From screens <em>to search.</em></h2></div>
+      <div><h2 id="about-title">From screens <em>to search.</em></h2></div>
       <div class="about-body">
         {% for paragraph in site.about.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
       </div>
@@ -63,7 +58,7 @@
   </section>
   <section class="experience shell band" id="experience" aria-labelledby="experience-title">
     <div class="section-head">
-      <span class="chapter">Work history</span><h2 id="experience-title"><em>Experience.</em></h2>
+      <h2 id="experience-title"><em>Experience.</em></h2>
     </div>
     <div class="positions">
       {% for role in site.experience %}
@@ -84,7 +79,7 @@
   </section>
   <section class="skills band" id="skills" aria-labelledby="skills-title">
     <div class="shell skills-grid">
-      <div><span class="chapter">Technical skills</span><h2 id="skills-title">My <em>toolkit.</em></h2></div>
+      <div><h2 id="skills-title">My <em>toolkit.</em></h2></div>
       <div class="skill-list">
         {% for skill in site.skills %}<article><h3>{{ skill.title }}</h3><p>{{ skill.body }}</p></article>{% endfor %}
       </div>
@@ -93,10 +88,10 @@
   <section class="contact" id="contact" aria-labelledby="contact-title">
     <div class="contact-cover" aria-hidden="true"></div>
     <div class="shell contact-inner">
-      <span class="chapter">Contact</span><h2 id="contact-title">Get in <em>touch.</em></h2>
+      <h2 id="contact-title">Get in <em>touch.</em></h2>
       <p>{{ site.contact.body }}</p>
       <div class="contact-links">
-        {% for link in site.contact.links %}<a href="{{ link.url }}">{{ link.label }} <span aria-hidden="true">↗</span></a>{% endfor %}
+        {% for link in site.contact.links %}<a href="{{ link.url }}">{{ link.label }}</a>{% endfor %}
       </div>
     </div>
   </section>
