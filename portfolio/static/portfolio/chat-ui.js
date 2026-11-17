@@ -44,11 +44,11 @@
     }
   }
   function legacyStylesReady() {
-    if (!legacy || getComputedStyle(widget).getPropertyValue('--abby-size').trim()) return Promise.resolve();
+    if (!legacy || getComputedStyle(widget).getPropertyValue('--abby-flight-version').trim() === '4') return Promise.resolve();
     // A visitor can have the previous unversioned stylesheet in the Pages cache.
     const sheet = document.createElement('link');
     sheet.rel = 'stylesheet';
-    sheet.href = new URL('../assistant.css?v=abby-3', launcher.querySelector('img').src).href;
+    sheet.href = new URL('../assistant.css?v=abby-4', launcher.querySelector('img').src).href;
     const oldSheet = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).find(link =>
       new URL(link.href).pathname === new URL(sheet.href).pathname
     );
@@ -64,11 +64,11 @@
   }
 
   function matchingEngine() {
-    if (!legacy || window.ObservatoryGuide.name === 'Abby') return Promise.resolve(window.ObservatoryGuide);
+    if (!legacy || window.ObservatoryGuide.version === 4) return Promise.resolve(window.ObservatoryGuide);
     // Cached assets can arrive from different releases. Fetch the matching
     // local answer engine only when the visitor actually asks a question.
     const script = document.createElement('script');
-    script.src = new URL('../concierge-engine.js?v=abby-3', launcher.querySelector('img').src).href;
+    script.src = new URL('../concierge-engine.js?v=abby-4', launcher.querySelector('img').src).href;
     return new Promise((resolve, reject) => {
       script.onload = () => resolve(window.ObservatoryGuide);
       script.onerror = () => reject(new Error('Portfolio guide unavailable'));
@@ -77,6 +77,11 @@
   }
 
   const stage = widget.querySelector('.guide-stage');
+  const skipFlight = document.createElement('button');
+  skipFlight.type = 'button';
+  skipFlight.className = 'abby-skip';
+  skipFlight.textContent = 'Skip flight';
+  stage.append(skipFlight);
   const craft = widget.querySelector('.abby-craft');
   const flight = widget.querySelector('.abby-flight');
   const greeting = widget.querySelector('.abby-greeting');
@@ -111,8 +116,15 @@
       source = page.querySelector('#guide-data');
     }
     if (!source) throw new Error('Missing portfolio source');
+    const site = JSON.parse(source.textContent);
+    // Older static exports embed their education snapshot in the home document.
+    if (!Array.isArray(site.education) || !site.education.some(item => item.kind)) {
+      const response = await fetch(new URL('static/portfolio/education.json?v=exchange-1', home), {credentials: 'same-origin'});
+      if (!response.ok) throw new Error('Portfolio education unavailable');
+      site.education = await response.json();
+    }
     const engine = await matchingEngine();
-    return engine.create(JSON.parse(source.textContent), widget.dataset.home, widget.dataset.project);
+    return engine.create(site, widget.dataset.home, widget.dataset.project);
   }
 
   function getGuide() {
@@ -137,8 +149,9 @@
     widget.dataset.state = state;
     panel.hidden = state !== 'chat';
     stage.hidden = !['entering', 'greeting', 'docking'].includes(state);
+    skipFlight.hidden = state !== 'entering';
     greeting.hidden = state !== 'greeting';
-    craft.tabIndex = state === 'greeting' ? 0 : -1;
+    craft.tabIndex = ['entering', 'greeting'].includes(state) ? 0 : -1;
     launcher.tabIndex = state === 'docked' ? 0 : -1;
     widget.classList.toggle('is-open', state === 'chat');
     launcher.setAttribute('aria-expanded', String(state === 'chat'));
@@ -179,7 +192,7 @@
       clearTimeout(flightTimeout);
       cancelAnimationFrame(flightFrame);
       const elapsed = (performance.now() - started) / duration;
-      if (elapsed >= 1) {
+      if (elapsed >= 1 || motion.matches) {
         stopFlight();
         done();
         return;
@@ -193,7 +206,7 @@
         a + (after.pose[axis] - a) * blend +
         interval * (speeds[next-1][axis] * t*(1-t)*(1-t) - speeds[next][axis] * t*t*(1-t))
       );
-      flight.style.transform = 'perspective(720px) translate3d('+x+'px,'+y+'px,0) ' +
+      flight.style.transform = 'translate3d('+x+'px,'+y+'px,0) perspective(720px) ' +
         'scale('+scale+') rotateZ('+bank+'deg) rotateY('+yaw+'deg) rotateX('+pitch+'deg)';
       flightFrame = requestAnimationFrame(step);
       // Some embedded webviews pause the frame clock without hiding the page.
@@ -206,15 +219,39 @@
     if (widget.dataset.state !== 'preparing') return;
     setScene('entering');
     const rect = craft.getBoundingClientRect();
-    const distance = rect.left + rect.width * 1.9;
-    const lift = Math.min(window.innerHeight * .19, 145);
-    fly([
-      keyframe(0, -distance, lift, .22, -26, -53, 9),
-      keyframe(.33, -distance * .61, lift * .12, .52, -17, -31, 5),
-      keyframe(.66, rect.width * .21, -lift * .17, 1.07, 11, 13, -6),
-      keyframe(.85, -rect.width * .025, 3, .99, -3, -2),
-      keyframe(1, 0, 0, 1, 0, 0),
-    ], 1820, () => setScene('greeting'));
+    const viewport = stage.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const startX = viewport.right - centerX + rect.width * .45;
+    const edgeX = viewport.right - centerX - rect.width * .48 - 14;
+    const radius = Math.min(viewport.width * .2, viewport.height * .19, 162);
+    const loopY = -radius * .17;
+    const stops = [
+      keyframe(0, startX, radius * .85, .48, -23, 37, 8),
+      keyframe(.11, startX * .54, radius * .41, .72, -12, 21, 5),
+      keyframe(.235, 0, 0, 1, 0, 0),
+      keyframe(.32, edgeX * .46, -radius * .28, .83, 15, -21, 3),
+      keyframe(.38, edgeX * .84, radius * .48, .68, 23, -26, 7),
+    ];
+    // Start and finish the orbit at the outboard edge. Eight equally spaced
+    // waypoints describe a complete circle with an upward tangent at entry.
+    for (let eighth = 0; eighth <= 8; eighth++) {
+      const angle = eighth * Math.PI / 4;
+      const x = edgeX - radius * (1 - Math.cos(angle));
+      const y = loopY - radius * Math.sin(angle);
+      stops.push(keyframe(.445 + .36 * eighth / 8, x, y,
+        .66 - .09 * Math.sin(angle), 15 * Math.cos(angle),
+        27 * Math.sin(angle), 8 * Math.cos(angle)));
+    }
+    stops.push(
+      keyframe(.87, edgeX * .69, -radius * .71, .78, -16, 29, -4),
+      keyframe(.955, edgeX * .09, -radius * .13, 1.03, -7, 9, -3),
+      keyframe(1, 0, 0, 1, 0, 0)
+    );
+    fly(stops, 10200, () => {
+      const wasSkipping = document.activeElement === skipFlight;
+      setScene('greeting');
+      if (wasSkipping) talk.focus({preventScroll: true});
+    });
   }
 
   function dock(restoreFocus = false) {
@@ -332,6 +369,7 @@
 
   launcher.addEventListener('click', openChat);
   craft.addEventListener('click', openChat);
+  skipFlight.addEventListener('click', () => dock(true));
   talk.addEventListener('click', openChat);
   dismiss.addEventListener('click', () => dock(true));
   close.addEventListener('click', () => dock(true));
@@ -376,24 +414,20 @@
     }
   });
 
-  const visitKey = 'observatory-abby-arrival-v1';
-  let firstVisit = true;
-  try {
-    firstVisit = !sessionStorage.getItem(visitKey);
-    sessionStorage.setItem(visitKey, 'seen');
-  } catch {
-    // A same-site navigation and reload can still suppress a duplicate arrival
-    // when browser settings disable session storage.
+  function shouldFlyOnArrival() {
+    const entry = performance.getEntriesByType('navigation')[0];
+    const type = entry ? entry.type : performance.navigation && performance.navigation.type;
+    if (type === 'reload' || type === 1) return true;
+    if (type === 'back_forward' || type === 2) return false;
     const home = new URL(widget.dataset.home, document.baseURI);
     const previous = document.referrer && new URL(document.referrer);
-    const withinPortfolio = previous && previous.origin === home.origin && previous.pathname.startsWith(home.pathname);
-    firstVisit = !withinPortfolio && !(history.state && history.state.abbySeen);
-    try { history.replaceState(Object.assign({}, history.state, {abbySeen: true}), ''); } catch {}
+    return !(previous && previous.origin === home.origin && previous.pathname.startsWith(home.pathname));
   }
   function start() {
     widget.hidden = false;
-    setScene(firstVisit ? 'preparing' : 'docked');
-    if (!firstVisit) return;
+    const shouldFly = shouldFlyOnArrival();
+    setScene(shouldFly ? 'preparing' : 'docked');
+    if (!shouldFly) return;
     if (portrait.complete) {
       if (portrait.naturalWidth) arrive();
       else setScene('docked');

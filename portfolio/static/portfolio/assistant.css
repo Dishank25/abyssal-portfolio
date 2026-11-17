@@ -1,4 +1,5 @@
 .guide-dock {
+  --abby-flight-version: 4;
   --guide-gap: clamp(16px, 2.2vw, 32px);
   --guide-rim: #45656b;
   --abby-size: clamp(140px, 14vw, 172px);
@@ -39,6 +40,14 @@
   position: fixed; top: 0; right: 0; bottom: 0; left: 0;
   pointer-events: none;
 }
+.abby-skip {
+  position: absolute; right: max(var(--guide-gap), env(safe-area-inset-right));
+  bottom: max(var(--guide-gap), env(safe-area-inset-bottom));
+  min-height: 44px; padding: 6px 16px; pointer-events: auto; touch-action: manipulation;
+  border: 1px solid var(--abby-pop-rim); border-radius: 24px; cursor: pointer;
+  background: var(--abby-pop); color: var(--abby-greeting-text); font: 550 .82rem/1.2 var(--display);
+}
+.abby-skip:hover { border-color: var(--mint); }
 .abby-station {
   position: absolute; left: 50%; top: 43%; width: var(--abby-size);
   transform: translate(-50%, -50%);
@@ -52,6 +61,8 @@
 .guide-dock[data-state="entering"] .abby-flight { pointer-events: auto; cursor: pointer; }
 .abby-flight, .abby-hover { position: relative; display: block; width: 100%; }
 .abby-flight { transform-origin: 50% 53%; transform-style: preserve-3d; }
+.guide-dock[data-state="entering"] .abby-flight,
+.guide-dock[data-state="docking"] .abby-flight { will-change: transform; }
 .abby-hover { transform-origin: 51% 70%; }
 .abby-robot { position: relative; z-index: 1; display: block; width: 100%; height: auto; user-select: none; }
 .abby-plume {

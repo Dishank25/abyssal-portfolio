@@ -55,9 +55,9 @@
   const focusWords = /\b(it|that|this|there|them|these|those|both|one|ones|its|another|follow up|and the|the (?:stack|tech|repo|code|model|data|backend|approach|demo|evaluation))\b/;
   const projectWords = /\b(projects?|prototypes?|apps?|examples?|systems?|studies|portfolio|portfolio work|products?|built|builds|developed|implemented|worked on|worked with|which (?:one|work)|experience with)\b/;
   const roleWords = /\b(experience|career|employment|internships?|intern|jobs?|roles?|employers?|companies|worked|positions?|work history|professional background|professional journey)\b/;
-  const educationWords = /\b(education|educational|academic|degree|degrees|graduation|graduate|graduated|graduating|university|college|school|qualification|qualifications|studied|study|training|course|courses|certification|certifications|certificates|certified|euron|btech|b tech|fine tuning)\b/;
+  const educationWords = /\b(education|educational|academic|degree|degrees|graduation|graduate|graduated|graduating|university|college|school|qualification|qualifications|studied|study|training|course|courses|certification|certifications|certificates|certified|btech|b tech)\b/;
   const skillWords = /\b(skills?|strengths?|expertise|speciali[sz](?:e|es|ed|ation)|toolkit|proficient|good at|know how to|tech stack|technical background)\b/;
-  const sectionTitles = {work: "Selected work", about: "About Dishank", experience: "Work history & education", skills: "Technical skills", contact: "Contact Dishank"};
+  const sectionTitles = {work: "My works", about: "About Dishank", experience: "Work history & education", skills: "Technical skills", contact: "Contact Dishank"};
   const roleQuote = body => "In Dishank’s words: “" + body + "”";
   const locationIntent = /\b(where.*(?:based|live|located|from)|location|where.*city|what city|which city)\b/;
   const contactIntent = /\b(contact|connect|linkedin|reach (?:out|him|you|dishank)|get in touch|hire|recruit|collaborat(?:e|ion)|message him|talk to him)\b/;
@@ -185,6 +185,19 @@
       if (/\b(resume|cv|résumé)\b/.test(q)) {
         return answer("His professional timeline and education are published in the portfolio. For a résumé file, contact Dishank directly.", [section("experience"), ...contact().slice(0,1)]);
       }
+      const exchangeQuestion = /\b(thailand|exchange|study abroad|studied abroad|international program)\b/.test(q);
+      const exchangeFollowUp = lastTopic === "exchange" && /\b(when|where|what year|which|how long|how many|duration|dates|host|university|college|activities|learned)\b/.test(q) && !/\b(degree|btech|b tech|projects?|skills?|work|role|job)\b/.test(q);
+      if (exchangeQuestion || exchangeFollowUp) {
+        focus = [];
+        lastTopic = "exchange";
+        const exchange = site.education.find(item => item.kind === "exchange");
+        if (!exchange) return unavailable();
+        let text = "Dishank took part in a student exchange program in " + exchange.institution + ".";
+        if (/\b(when|what year|which year|date|dates|host|university|institution|college|how long|duration|activities|courses|learn|learned)\b/.test(q)) {
+          text += " His portfolio lists the country. For the host institution, dates or program details, you can ask him directly.";
+        }
+        return answer(text, [section("experience")], ["Where did he earn his degree?", "What has he built?"]);
+      }
       if (lastTopic === "experience" && /\b(before (?:that|this|then)|prior to that|after (?:that|this) role)\b/.test(q)) {
         if (q.includes("after") && lastRole) {
           const newer = site.experience[site.experience.indexOf(lastRole)-1];
@@ -219,9 +232,15 @@
       if ((generalProjectQuestion || /\b(how many|number of|all|list|show|browse|walk me through)\b/.test(q) && /\b(projects|case studies|portfolio work)\b/.test(q)) && !tech.length && !/\b(this|that|the one)\b/.test(q))
         return projectList(projects, "The portfolio documents " + projects.length + " projects.");
       if (educationWords.test(q) && !/\b(case study|case studies|job portal|flutter app)\b/.test(q)) {
-        focus=[];lastTopic="education";
-        const ed = site.education.filter(e=>/\b(courses?|certifications?|certified|certificates?|training|euron|fine tuning)\b/.test(q) ? !/b\.tech/i.test(e.title) : true);
-        return answer(ed.map(e=>e.title+" · "+e.institution+" ("+e.date+")").join("\n\n"),[section("experience")],["What did he work on first?", "What are his skills?"]);
+        focus = [];
+        lastTopic = "education";
+        if (/\b(courses?|certifications?|certified|certificates?|training)\b/.test(q)) {
+          return answer("The education section lists Dishank’s degree and student exchange. It doesn’t list a certification or training course.", [section("experience")]);
+        }
+        const degreeOnly = /\b(degrees?|college|university|graduate|graduated|btech|b tech)\b/.test(q);
+        const items = site.education.filter(item => !degreeOnly || item.kind === "degree");
+        return answer(items.map(item => item.title + " · " + item.institution + (item.date ? " (" + item.date + ")" : "")).join("\n\n"),
+          [section("experience")], ["Tell me about the Thailand exchange", "What has he built?"]);
       }
       if (contactIntent.test(q)) {lastTopic="contact";focus=[];return answer("The public way to reach Dishank is LinkedIn. You can also browse his repositories on GitHub.", contact());}
       if (locationIntent.test(q)) {lastTopic="about";focus=[];return answer("Dishank is based in "+site.location+". He works in AI engineering and consulting.",[section("about")]);}
@@ -248,7 +267,7 @@
       }
       if (/\b(hi|hello|hey|help|start)\b/.test(q) && q.split(" ").length<6) return answer("Hi, I’m Abby, Dishank’s robo assistant. Ask about his engineering work, career, skills or a particular project.",[section("about")],["What has he built?", "Which tools does he use?"]);
       if (/\b(github|repos|repositories|source code)\b/.test(q) && ranked[0].matched<=1) return answer("Dishank publishes his code on GitHub. Individual case studies link to the repositories where source is available.",[contact().find(l=>l.label==="GitHub"),section("work")]);
-      if (/\b(what (?:has|have) (?:he|you|dishank) (?:built|made)|his projects|your projects|featured work|portfolio projects|selected work)\b/.test(q)) return projectList(projects, "These are the projects in Dishank’s portfolio.");
+      if (/\b(what (?:has|have) (?:he|you|dishank) (?:built|made)|his projects|your projects|featured work|portfolio projects|selected work|my works|his works|your works)\b/.test(q)) return projectList(projects, "These are the projects in Dishank’s portfolio.");
       if (tech.length && technicalProjects.length) return projectList(technicalProjects,"These case studies use "+tech.join(" and ")+".");
       if (ranked[0].score>=3 && (ranked[0].matched>=2 || ranked[0].score>=5) && (projectWords.test(q) || /\b(how|why|which|what|where|tell)\b/.test(q))) {
         if (ranked[1].score>=ranked[0].score*.82 && ranked[1].score>2 && !compare.test(q)) {
@@ -269,5 +288,5 @@
       return answer(responses.map(r=>r.text).join("\n\n"), [...links.values()], responses[responses.length - 1].prompts);
     }};
   }
-  window.ObservatoryGuide = {name: 'Abby', create};
+  window.ObservatoryGuide = {name: 'Abby', version: 4, create};
 })();

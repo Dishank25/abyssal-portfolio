@@ -1,5 +1,5 @@
 {% load portfolio_urls %}
-<link rel="stylesheet" href="{% asset_url 'assistant.css' %}?v=abby-3">
+<link rel="stylesheet" href="{% asset_url 'assistant.css' %}?v=abby-4">
 <div class="guide-dock" data-guide data-state="docked" data-home="{% page_url 'home' %}" data-project="{{ project.id|default:'' }}" hidden>
   <button type="button" class="guide-launch" aria-haspopup="dialog" aria-controls="guide-panel" aria-expanded="false" aria-label="Chat with Abby, Dishank’s robo assistant">
     <img class="guide-bot" src="{% asset_url 'assets/observatory-guide.webp' %}" alt="" width="58" height="58">
@@ -27,5 +27,5 @@
   </section>
 </div>
 {% if not project %}{{ site|json_script:"guide-data" }}{% endif %}
-<script defer src="{% asset_url 'concierge-engine.js' %}?v=abby-3"></script>
-<script defer src="{% asset_url 'chat-ui.js' %}?v=abby-3"></script>
+<script defer src="{% asset_url 'concierge-engine.js' %}?v=abby-4"></script>
+<script defer src="{% asset_url 'chat-ui.js' %}?v=abby-4"></script>

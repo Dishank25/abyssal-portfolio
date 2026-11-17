@@ -2,7 +2,7 @@
 {% load portfolio_urls %}
 {% block head %}
   <link rel="preload" href="{% asset_url 'assets/observatory-breathing.svg' %}" as="image">
-  <script defer src="{% asset_url 'site.js' %}?v=3"></script>
+  <script defer src="{% asset_url 'site.js' %}?v=section-5"></script>
 {% endblock %}
 {% block main %}
 <main id="main">
@@ -28,7 +28,7 @@
   <div id="work" class="work-area">
     <section class="work shell" aria-labelledby="work-title">
       <div class="work-intro">
-        <h2 id="work-title">Selected <em>work.</em></h2>
+        <h2 id="work-title">My <em>works.</em></h2>
         <p>Explore my work in applied AI, Python, and mobile development. Each project explains the problem, the implementation, and the decisions behind it.</p>
         <figure class="room">
           <img src="{% asset_url 'assets/signal-room.webp' %}" width="1640" height="618" loading="lazy" alt="An illustrated deep-sea signal room overlooking a trail of underwater lamps.">
@@ -68,10 +68,10 @@
         </article>
       {% endfor %}
       <div class="education">
-        <h3>Education &amp; training</h3>
+        <h3>Education</h3>
         <ul>
           {% for item in site.education %}
-            <li><span>{{ item.date }}</span><div>{{ item.title }}<small>{{ item.institution }}</small></div></li>
+            <li>{% if item.date %}<span>{{ item.date }}</span>{% endif %}<div>{{ item.title }}<small>{{ item.institution }}</small></div></li>
           {% endfor %}
         </ul>
       </div>

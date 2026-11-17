@@ -12,6 +12,9 @@
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
   --header-height: 76px;
   --header-gutter: max(6vw, calc((100vw - 1432px) / 2));
+  --section-columns: minmax(0,.82fr) minmax(0,1.18fr);
+  --section-gap: clamp(44px,7vw,110px);
+  --section-pin-top: calc(var(--header-height) + 40px);
   --menu-border: #466269;
   --menu-shadow: rgba(0,8,12,.38);
 }
@@ -86,8 +89,9 @@ h1 em { display: block; margin-top: .09em; color: var(--mint); }
 .action:hover { background: var(--mint); color: #0a2427; }
 
 .work-area { background: var(--ink); position: relative; }
-.work { display: grid; grid-template-columns: minmax(0,.87fr) minmax(0,1.13fr); gap: clamp(55px,10vw,155px); padding-block: clamp(83px,10vw,160px); }
-.work-intro { align-self: start; position: sticky; top: calc(var(--header-height) + 56px); }
+.work, .about-grid, .experience, .skills-grid { display: grid; grid-template-columns: var(--section-columns); gap: var(--section-gap); }
+.work { padding-block: clamp(83px,10vw,160px); }
+.work-intro, .experience .section-head { align-self: start; position: sticky; top: var(--section-pin-top); }
 .chapter { color: var(--mint); }
 h2 { margin: 0; font-size: clamp(3.7rem, 7vw, 7.5rem); }
 h2 em { color: var(--mint); }
@@ -124,13 +128,11 @@ h2 em { color: var(--mint); }
 #gate-result { color: var(--mint); font-size: .83rem; }
 .band { padding-block: clamp(75px, 8.9vw, 150px); }
 .about, .skills { background: var(--ink-raised); }
-.about-grid, .experience, .skills-grid { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: clamp(44px,8vw,130px); }
 .about h2 em, .skills h2 em { display: block; }
 .about-body { max-width: 690px; }
 .about-body p:first-child { color: var(--text); font-size: clamp(1.28rem,2.1vw,2rem); line-height: 1.45; letter-spacing: -.027em; }
 .about-body p + p { margin-top: 22px; color: var(--muted); }
 .experience { background: var(--ink-dark); }
-.section-head { align-self: start; }
 .experience h2 { font-size: clamp(3rem,5.8vw,6rem); }
 .positions { min-width: 0; }
 .position { display:grid; grid-template-columns: minmax(84px,.32fr) 1fr; gap: clamp(15px,2.6vw,45px); padding-block: 23px 26px; }
@@ -142,6 +144,7 @@ h2 em { color: var(--mint); }
 .education ul { list-style: none; padding:0; margin:17px 0 0; }
 .education li { display:grid; grid-template-columns:minmax(84px,.32fr) 1fr; gap:clamp(15px,2.6vw,45px); margin-top:13px; font-size:.88rem; }
 .education li > span { font: .70rem/1.65 var(--mono); color:#a7cdc4; }
+.education li > div { grid-column: -2 / -1; }
 .education small { display: block; color: var(--muted); font-size: .82rem; margin-top: 2px; }
 .skill-list { display: grid; grid-template-columns: 1fr 1fr; gap: 31px 34px; }
 .skill-list h3 { font-size:1.24rem; }
@@ -154,16 +157,22 @@ h2 em { color: var(--mint); }
 footer { background: #061218; }
 footer .shell { display:flex; justify-content: space-between; gap:20px; align-items:center; padding-block: 24px; }
 .return { gap:9px; color: var(--muted); font-size: .79rem; }
+@media (min-width: 1001px) {
+  .site-header { --control-gutter: max(8px, calc(var(--header-gutter) - 58px)); }
+  .header-inner { width: auto; margin-inline: var(--control-gutter); }
+  .menu-sheet { right: var(--control-gutter); }
+}
+@media (min-width: 741px) and (max-height: 700px) {
+  :root { --section-pin-top: calc(var(--header-height) + 16px); }
+}
 @media (min-width: 901px) and (max-height: 700px) {
   .hero-inner { padding-block: 80px 65px; }
   h1 { font-size:clamp(5.6rem,8.4vw,9rem); margin-block:15px; }
   .hero-intro { font-size:1.18rem; }
   .action { margin-top:15px; }
-  .work-intro { top:calc(var(--header-height) + 16px); }
 }
 @media (max-width: 1000px) {
-  .work { gap: 6vw; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); }
-  .about-grid, .experience, .skills-grid { grid-template-columns:minmax(0,.62fr) minmax(0,1fr); gap:5vw; }
+  :root { --section-gap: 5vw; }
   .position, .education li { grid-template-columns:1fr; gap:5px; }
   .skill-list{ column-gap:21px; }
 }
@@ -184,7 +193,7 @@ footer .shell { display:flex; justify-content: space-between; gap:20px; align-it
   .hero-intro { max-width:335px; font-size:1.1rem; }
   .action { margin-top:17px; }
   .work, .about-grid, .experience, .skills-grid { grid-template-columns:1fr; gap:32px; }
-  .work-intro { position:static; }
+  .work-intro, .experience .section-head { position: static; }
   .work h2 em, .about h2 em, .skills h2 em { display:inline; }
   .work-intro > p { margin-top:15px; }
   .room { margin-top:22px; aspect-ratio:2.5; }
@@ -240,7 +249,7 @@ footer .shell { display:flex; justify-content: space-between; gap:20px; align-it
   .hero-inner, .band, .work, .contact-inner { padding:20px 0; }
   .hero-copy { width:100%; }
   .work, .about-grid, .experience, .skills-grid { display:block; }
-  .work-intro { position:static; }
+  .work-intro, .experience .section-head { position: static; }
   body p, .hero-role, .chapter, h1 em, h2 em, .project-detail p, .company, .when { color:#24413b !important; }
   h1,h2 { font-size:36pt; }
 }

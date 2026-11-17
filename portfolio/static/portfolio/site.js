@@ -10,6 +10,47 @@
   openBookmarkedProject();
   window.addEventListener('hashchange', openBookmarkedProject);
 
+  // Older static exports embed an earlier education list in both the page and the guide.
+  const educationTitle = document.querySelector('.education h3');
+  if (educationTitle && educationTitle.textContent.trim() === 'Education & training') {
+    const source = document.getElementById('guide-data');
+    const guide = JSON.parse(source.textContent);
+    const list = document.querySelector('.education ul');
+    const educationUrl = new URL('education.json?v=exchange-1', document.currentScript.src);
+
+    function displayEducation(items) {
+      const rows = document.createDocumentFragment();
+      for (const item of items) {
+        const row = document.createElement('li');
+        if (item.date) {
+          const date = document.createElement('span');
+          date.textContent = item.date;
+          row.append(date);
+        }
+        const detail = document.createElement('div');
+        detail.textContent = item.title;
+        const institution = document.createElement('small');
+        institution.textContent = item.institution;
+        detail.append(institution);
+        row.append(detail);
+        rows.append(row);
+      }
+      list.textContent = '';
+      list.append(rows);
+      guide.education = items;
+      source.textContent = JSON.stringify(guide);
+    }
+
+    educationTitle.textContent = 'Education';
+    displayEducation(guide.education.filter(item => item.institution !== 'Euron'));
+    fetch(educationUrl).then(response => {
+      if (response.ok) return response.json();
+      throw new Error('Education unavailable');
+    }).then(displayEducation).catch(() => {
+      // The remaining embedded records are also available when the visitor is offline.
+    });
+  }
+
   const header = document.querySelector('.site-header');
   // Upgrade older static homepages that still contain the wordmark and link ornaments.
   const wordmark = header.querySelector('.brand');
@@ -17,6 +58,10 @@
     wordmark.className = 'observatory-mark';
     wordmark.setAttribute('aria-hidden', 'true');
     wordmark.querySelector('span')?.remove();
+    header.querySelector('.main-nav a[href$="#work"]').textContent = 'My works';
+    const heading = document.getElementById('work-title');
+    heading.firstChild.textContent = 'My ';
+    heading.querySelector('em').textContent = 'works.';
     document.querySelector('.hero-role .slash')?.replaceWith('in');
     const ornaments = document.querySelectorAll(
       '.hero-base, .hero-role > span:empty, main .chapter, .room > figcaption, .main-nav a > span[aria-hidden], ' +
@@ -24,6 +69,14 @@
       '.contact-links a > span[aria-hidden], footer .return > span[aria-hidden]'
     );
     for (const ornament of ornaments) ornament.remove();
+    if (!getComputedStyle(document.documentElement).getPropertyValue('--section-pin-top')) {
+      const sheet = document.querySelector('link[href*="/site.css"]');
+      if (sheet) {
+        const url = new URL(sheet.href);
+        url.searchParams.set('v', 'section-5');
+        sheet.href = url.href;
+      }
+    }
   }
   const hero = document.querySelector('.hero');
   const descent = document.querySelector('.descent');

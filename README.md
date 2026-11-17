@@ -21,10 +21,10 @@ On Windows PowerShell, activate the environment with `.\.venv\Scripts\Activate.p
 
 ## How it works
 
-- [Career and project content](portfolio/content.json) supplies both the home page and each individual project page. To add a project, give its entry a unique URL slug in the `id` field, then edit its title, description, paragraphs, tags and source links.
+- [Career and project content](portfolio/content.json) supplies the home page and each project page. The [education list](portfolio/static/portfolio/education.json) supplies the degree and exchange entry for both the site and Abby. To add a project, give its entry a unique URL slug in the `id` field, then edit its title, description, paragraphs, tags and source links.
 - [Django views](portfolio/views.py) serve the homepage at `/` and case studies at `/projects/<slug>/`. Each project row opens its own study in one tap, and old project bookmarks continue to work.
 - [Static assets](portfolio/static/portfolio/) handle the character animation, scroll depth, mobile composition, and the keyboard-operated confidence slider. The illustrated character breathes automatically. The interface reduces background effects for visitors who request reduced motion.
-- Abby flies in to greet visitors. Selecting her opens the chat. Dismissing the greeting docks her in the corner, where visitors can reopen it. She uses the published [profile and project descriptions](portfolio/content.json) to answer in the browser and link to supporting pages. On a case study she loads the index from the homepage when the visitor first asks a question. Visitor questions stay on the device.
+- Abby flies in on arrival and repeats her 10.2-second flight on refresh. She crosses to the centre, banks out to the edge, circles once, and returns to greet the visitor. Visitors who use reduced motion see her greeting immediately. Selecting her opens the chat. Dismissing the greeting docks her in the corner, where visitors can reopen it. She uses the published [profile and project descriptions](portfolio/content.json) to answer in the browser and link to supporting pages. On a case study she loads the index from the homepage when the visitor first asks a question. Visitor questions stay on the device.
 - [The export command](portfolio/management/commands/export_site.py) renders the same Django views into HTML and copies their assets. GitHub Pages serves this static edition. Relative links work under both a domain root and a repository path.
 
 ## Verify and export

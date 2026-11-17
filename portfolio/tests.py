@@ -44,6 +44,18 @@ class PageLinks(HTMLParser):
 
 
 class PortfolioTests(SimpleTestCase):
+    def test_home_and_guide_share_current_education(self):
+        home = self.client.get(reverse("portfolio:home"))
+        self.assertContains(home, "Student exchange program")
+        self.assertContains(home, "Thailand")
+        self.assertNotContains(home, "Euron")
+        parser = PageLinks()
+        parser.feed(home.content.decode())
+        data = json.loads("".join(parser.index_text))
+        exchange = next(item for item in data["education"] if item["kind"] == "exchange")
+        self.assertEqual(exchange["institution"], "Thailand")
+        self.assertFalse(exchange["date"])
+
     def test_home_and_individual_projects(self):
         home = self.client.get(reverse("portfolio:home"))
         for project in get_portfolio()["projects"]:
